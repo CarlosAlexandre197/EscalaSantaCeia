@@ -1,0 +1,165 @@
+from PyQt6.QtCore import Qt
+
+from PyQt6.QtWidgets import (
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QMessageBox
+)
+
+from telas.cadastro_obreiros import TelaCadastroObreiros
+
+
+class TelaPrincipal(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+
+        self.tela_obreiros = None
+
+        self.setWindowTitle("Escala Santa Ceia")
+        self.resize(1000, 650)
+
+        self.criar_interface()
+
+    def criar_interface(self):
+
+        widget_central = QWidget()
+        self.setCentralWidget(widget_central)
+
+        layout_principal = QVBoxLayout()
+        widget_central.setLayout(layout_principal)
+
+        # =========================
+        # TÍTULO
+        # =========================
+
+        titulo = QLabel("ESCALA SANTA CEIA")
+
+        titulo.setStyleSheet("""
+            QLabel {
+                font-size: 28px;
+                font-weight: bold;
+                padding: 20px;
+            }
+        """)
+
+        titulo.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )
+
+        layout_principal.addWidget(titulo)
+
+        # =========================
+        # SUBTÍTULO
+        # =========================
+
+        subtitulo = QLabel(
+            "Sistema de gerenciamento da escala mensal"
+        )
+
+        subtitulo.setStyleSheet("""
+            QLabel {
+                font-size: 16px;
+                padding-bottom: 20px;
+            }
+        """)
+
+        subtitulo.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )
+
+        layout_principal.addWidget(subtitulo)
+
+        # =========================
+        # BOTÕES
+        # =========================
+
+        layout_botoes = QHBoxLayout()
+
+        self.botao_obreiros = QPushButton(
+            "Cadastro de Obreiros"
+        )
+
+        self.botao_escala = QPushButton(
+            "Montar Escala"
+        )
+
+        self.botao_visualizar = QPushButton(
+            "Visualizar Escala"
+        )
+
+        self.botao_configuracoes = QPushButton(
+            "Configurações"
+        )
+
+        self.botao_obreiros.clicked.connect(
+            self.abrir_obreiros
+        )
+
+        layout_botoes.addWidget(
+            self.botao_obreiros
+        )
+
+        layout_botoes.addWidget(
+            self.botao_escala
+        )
+
+        layout_botoes.addWidget(
+            self.botao_visualizar
+        )
+
+        layout_botoes.addWidget(
+            self.botao_configuracoes
+        )
+
+        layout_principal.addLayout(
+            layout_botoes
+        )
+
+        layout_principal.addStretch()
+
+        # =========================
+        # RODAPÉ
+        # =========================
+
+        rodape = QLabel(
+            "Sistema de Escala Santa Ceia"
+        )
+
+        rodape.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )
+
+        layout_principal.addWidget(
+            rodape
+        )
+
+    # =========================
+    # CADASTRO DE OBREIROS
+    # =========================
+
+    def abrir_obreiros(self):
+
+        if self.tela_obreiros is None:
+
+            self.tela_obreiros = TelaCadastroObreiros()
+
+        self.tela_obreiros.show()
+        self.tela_obreiros.raise_()
+        self.tela_obreiros.activateWindow()
+
+    # =========================
+    # BOTÕES AINDA NÃO IMPLEMENTADOS
+    # =========================
+
+    def em_desenvolvimento(self):
+
+        QMessageBox.information(
+            self,
+            "Em desenvolvimento",
+            "Esta função será implementada nas próximas etapas."
+        )
