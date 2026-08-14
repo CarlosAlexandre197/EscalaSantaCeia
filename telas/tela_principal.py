@@ -1,4 +1,3 @@
-from telas.montar_escala import TelaMontarEscala
 from PyQt6.QtCore import Qt
 
 from PyQt6.QtWidgets import (
@@ -12,6 +11,7 @@ from PyQt6.QtWidgets import (
 )
 
 from telas.cadastro_obreiros import TelaCadastroObreiros
+from telas.montar_escala import TelaMontarEscala
 
 
 class TelaPrincipal(QMainWindow):
@@ -20,6 +20,7 @@ class TelaPrincipal(QMainWindow):
         super().__init__()
 
         self.tela_obreiros = None
+        self.tela_escala = None
 
         self.setWindowTitle("Escala Santa Ceia")
         self.resize(1000, 650)
@@ -164,3 +165,13 @@ class TelaPrincipal(QMainWindow):
             "Em desenvolvimento",
             "Esta função será implementada nas próximas etapas."
         )
+        
+    def abrir_escala(self):
+
+        if self.tela_escala is None:
+
+            self.tela_escala = TelaMontarEscala()
+
+        self.tela_escala.show()
+        self.tela_escala.raise_()
+        self.tela_escala.activateWindow()
