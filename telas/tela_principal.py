@@ -89,7 +89,7 @@ class TelaPrincipal(QMainWindow):
         self.botao_escala = QPushButton(
             "Montar Escala"
         )
-
+        
         self.botao_visualizar = QPushButton(
             "Visualizar Escala"
         )
@@ -100,6 +100,10 @@ class TelaPrincipal(QMainWindow):
 
         self.botao_obreiros.clicked.connect(
             self.abrir_obreiros
+        )
+        
+        self.botao_escala.clicked.connect(
+            self.abrir_escala
         )
 
         layout_botoes.addWidget(
