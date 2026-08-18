@@ -107,6 +107,10 @@ class TelaPrincipal(QMainWindow):
         self.botao_escala.clicked.connect(
             self.abrir_escala
         )
+        
+        self.botao_visualizar.clicked.connect(
+        self.abrir_visualizar
+        )
 
         layout_botoes.addWidget(
             self.botao_obreiros
@@ -181,3 +185,13 @@ class TelaPrincipal(QMainWindow):
         self.tela_escala.show()
         self.tela_escala.raise_()
         self.tela_escala.activateWindow()
+        
+    def abrir_visualizar(self):
+
+        if self.tela_visualizar is None:
+
+            self.tela_visualizar = TelaVisualizarEscala()
+
+        self.tela_visualizar.show()
+        self.tela_visualizar.raise_()
+        self.tela_visualizar.activateWindow()
