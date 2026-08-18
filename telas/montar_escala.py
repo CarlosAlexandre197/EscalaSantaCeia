@@ -245,6 +245,10 @@ class TelaMontarEscala(QWidget):
         self.tabela.setSelectionMode(
             QTableWidget.SelectionMode.SingleSelection
         )
+        
+        self.tabela.cellClicked.connect(
+            self.selecionar_escala
+        )
 
         layout_principal.addWidget(
             self.tabela
