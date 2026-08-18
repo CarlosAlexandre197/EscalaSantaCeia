@@ -22,6 +22,7 @@ class TelaPrincipal(QMainWindow):
 
         self.tela_obreiros = None
         self.tela_escala = None
+        self.tela_visualizar = None
 
         self.setWindowTitle("Escala Santa Ceia")
         self.resize(1000, 650)
