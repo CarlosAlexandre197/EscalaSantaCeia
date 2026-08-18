@@ -102,7 +102,7 @@ class TelaMontarEscala(QWidget):
         )
 
         # ----------------------------------------------
-        # OBRIEIROS
+        # OBREIROS
         # ----------------------------------------------
 
         label_obreiros = QLabel(
