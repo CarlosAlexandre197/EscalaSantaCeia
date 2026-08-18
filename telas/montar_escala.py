@@ -551,3 +551,74 @@ class TelaMontarEscala(QWidget):
         self.banco.fechar()
 
         event.accept()
+        
+    def selecionar_escala(
+        self,
+        linha,
+        coluna
+    ):
+
+        escala_id = int(
+            self.tabela.item(
+                linha,
+                0
+            ).text()
+        )
+
+        escalas = self.banco.buscar_santa_ceia(
+            escala_id
+        )
+
+        if not escalas:
+            return
+
+        # Guarda qual escala estamos editando
+        self.escala_editando_id = escala_id
+
+        # Data
+        data = QDate.fromString(
+            escalas[0]["data"],
+            "yyyy-MM-dd"
+        )
+
+        self.data_santa_ceia.setDate(
+            data
+        )
+
+        # IDs dos obreiros participantes
+        obreiros_selecionados = {
+            escala["obreiro_id"]
+            for escala in escalas
+        }
+
+        # Marca/desmarca os obreiros
+        for i in range(
+            self.lista_obreiros.count()
+        ):
+
+            item = self.lista_obreiros.item(i)
+
+            obreiro_id = item.data(
+                Qt.ItemDataRole.UserRole
+            )
+
+            if obreiro_id in obreiros_selecionados:
+
+                item.setCheckState(
+                    Qt.CheckState.Checked
+                )
+
+            else:
+
+                item.setCheckState(
+                    Qt.CheckState.Unchecked
+                )
+
+        # Ativa o botão de edição
+        self.botao_salvar_edicao.setEnabled(
+            True
+        )
+
+        self.botao_adicionar.setEnabled(
+            False
+        )
