@@ -622,3 +622,54 @@ class TelaMontarEscala(QWidget):
         self.botao_adicionar.setEnabled(
             False
         )
+        
+    def salvar_edicao(self):
+
+        if self.escala_editando_id is None:
+            return
+
+        obreiros_ids = (
+            self.obter_obreiros_selecionados()
+        )
+
+        if not obreiros_ids:
+
+            QMessageBox.warning(
+                self,
+                "Atenção",
+                "Selecione pelo menos um obreiro."
+            )
+
+            return
+
+        data = (
+            self.data_santa_ceia
+            .date()
+            .toString("yyyy-MM-dd")
+        )
+
+        try:
+
+            self.banco.atualizar_santa_ceia(
+                self.escala_editando_id,
+                data,
+                obreiros_ids
+            )
+
+            QMessageBox.information(
+                self,
+                "Sucesso",
+                "Escala atualizada com sucesso!"
+            )
+
+            self.cancelar_edicao()
+
+            self.carregar_escalas()
+
+        except Exception as erro:
+
+            QMessageBox.critical(
+                self,
+                "Erro",
+                f"Não foi possível atualizar a escala:\n\n{erro}"
+            )
