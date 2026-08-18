@@ -673,3 +673,17 @@ class TelaMontarEscala(QWidget):
                 "Erro",
                 f"Não foi possível atualizar a escala:\n\n{erro}"
             )
+            
+    def cancelar_edicao(self):
+
+        self.escala_editando_id = None
+
+        self.desmarcar_todos()
+
+        self.botao_salvar_edicao.setEnabled(
+            False
+        )
+
+        self.botao_adicionar.setEnabled(
+            True
+        )
