@@ -4,15 +4,16 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QComboBox,
     QDateEdit,
+    QListWidget,
+    QListWidgetItem,
     QTableWidget,
     QTableWidgetItem,
     QMessageBox,
     QHeaderView
 )
 
-from PyQt6.QtCore import QDate
+from PyQt6.QtCore import QDate, Qt
 
 from database import Banco
 
@@ -25,21 +26,27 @@ class TelaMontarEscala(QWidget):
         self.banco = Banco()
 
         self.setWindowTitle("Montar Escala - Santa Ceia")
-        self.resize(800, 600)
+        self.resize(900, 650)
 
         self.criar_interface()
         self.carregar_obreiros()
         self.carregar_escalas()
 
+    # ==================================================
+    # INTERFACE
+    # ==================================================
+
     def criar_interface(self):
 
         layout_principal = QVBoxLayout()
 
-        # =========================
+        # ----------------------------------------------
         # TÍTULO
-        # =========================
+        # ----------------------------------------------
 
-        titulo = QLabel("Montar Escala da Santa Ceia")
+        titulo = QLabel(
+            "Montar Escala da Santa Ceia"
+        )
 
         titulo.setStyleSheet("""
             QLabel {
@@ -49,51 +56,129 @@ class TelaMontarEscala(QWidget):
             }
         """)
 
+        titulo.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )
+
         layout_principal.addWidget(titulo)
 
-        # =========================
+        # ----------------------------------------------
         # DATA
-        # =========================
+        # ----------------------------------------------
 
         layout_data = QHBoxLayout()
 
-        label_data = QLabel("Data da Santa Ceia:")
+        label_data = QLabel(
+            "Data da Santa Ceia:"
+        )
 
         self.data_santa_ceia = QDateEdit()
 
-        self.data_santa_ceia.setCalendarPopup(True)
+        self.data_santa_ceia.setCalendarPopup(
+            True
+        )
+
+        self.data_santa_ceia.setDisplayFormat(
+            "dd/MM/yyyy"
+        )
 
         self.data_santa_ceia.setDate(
             QDate.currentDate()
         )
 
-        layout_data.addWidget(label_data)
-        layout_data.addWidget(self.data_santa_ceia)
+        layout_data.addWidget(
+            label_data
+        )
 
-        layout_principal.addLayout(layout_data)
+        layout_data.addWidget(
+            self.data_santa_ceia
+        )
 
-        # =========================
-        # OBREIRO
-        # =========================
+        layout_data.addStretch()
 
-        layout_obreiro = QHBoxLayout()
+        layout_principal.addLayout(
+            layout_data
+        )
 
-        label_obreiro = QLabel("Obreiro:")
+        # ----------------------------------------------
+        # OBRIEIROS
+        # ----------------------------------------------
 
-        self.combo_obreiro = QComboBox()
+        label_obreiros = QLabel(
+            "Selecione os obreiros participantes:"
+        )
 
-        layout_obreiro.addWidget(label_obreiro)
-        layout_obreiro.addWidget(self.combo_obreiro)
+        label_obreiros.setStyleSheet("""
+            QLabel {
+                font-weight: bold;
+                padding-top: 10px;
+            }
+        """)
 
-        layout_principal.addLayout(layout_obreiro)
+        layout_principal.addWidget(
+            label_obreiros
+        )
 
-        # =========================
-        # BOTÃO ADICIONAR
-        # =========================
+        self.lista_obreiros = QListWidget()
+
+        self.lista_obreiros.setMinimumHeight(
+            180
+        )
+
+        layout_principal.addWidget(
+            self.lista_obreiros
+        )
+
+        # ----------------------------------------------
+        # BOTÕES DE SELEÇÃO
+        # ----------------------------------------------
+
+        layout_selecao = QHBoxLayout()
+
+        self.botao_selecionar_todos = QPushButton(
+            "Selecionar Todos"
+        )
+
+        self.botao_desmarcar_todos = QPushButton(
+            "Desmarcar Todos"
+        )
+
+        self.botao_selecionar_todos.clicked.connect(
+            self.selecionar_todos
+        )
+
+        self.botao_desmarcar_todos.clicked.connect(
+            self.desmarcar_todos
+        )
+
+        layout_selecao.addWidget(
+            self.botao_selecionar_todos
+        )
+
+        layout_selecao.addWidget(
+            self.botao_desmarcar_todos
+        )
+
+        layout_selecao.addStretch()
+
+        layout_principal.addLayout(
+            layout_selecao
+        )
+
+        # ----------------------------------------------
+        # ADICIONAR ESCALA
+        # ----------------------------------------------
 
         self.botao_adicionar = QPushButton(
-            "Adicionar à Escala"
+            "Adicionar Escala"
         )
+
+        self.botao_adicionar.setStyleSheet("""
+            QPushButton {
+                padding: 10px;
+                font-weight: bold;
+            }
+        """)
 
         self.botao_adicionar.clicked.connect(
             self.adicionar_escala
@@ -103,9 +188,24 @@ class TelaMontarEscala(QWidget):
             self.botao_adicionar
         )
 
-        # =========================
-        # TABELA
-        # =========================
+        # ----------------------------------------------
+        # ESCALAS CADASTRADAS
+        # ----------------------------------------------
+
+        label_escalas = QLabel(
+            "Escalas cadastradas:"
+        )
+
+        label_escalas.setStyleSheet("""
+            QLabel {
+                font-weight: bold;
+                padding-top: 15px;
+            }
+        """)
+
+        layout_principal.addWidget(
+            label_escalas
+        )
 
         self.tabela = QTableWidget()
 
@@ -114,23 +214,31 @@ class TelaMontarEscala(QWidget):
         self.tabela.setHorizontalHeaderLabels([
             "ID",
             "Data",
-            "Obreiro"
+            "Obreiros"
         ])
 
         self.tabela.horizontalHeader().setSectionResizeMode(
             QHeaderView.ResizeMode.Stretch
         )
 
+        self.tabela.setSelectionBehavior(
+            QTableWidget.SelectionBehavior.SelectRows
+        )
+
+        self.tabela.setSelectionMode(
+            QTableWidget.SelectionMode.SingleSelection
+        )
+
         layout_principal.addWidget(
             self.tabela
         )
 
-        # =========================
-        # EXCLUIR
-        # =========================
+        # ----------------------------------------------
+        # EXCLUIR ESCALA
+        # ----------------------------------------------
 
         self.botao_excluir = QPushButton(
-            "Excluir Selecionada"
+            "Excluir Escala Selecionada"
         )
 
         self.botao_excluir.clicked.connect(
@@ -145,59 +253,186 @@ class TelaMontarEscala(QWidget):
             layout_principal
         )
 
-    # =========================
+    # ==================================================
     # CARREGAR OBRIEIROS
-    # =========================
+    # ==================================================
 
     def carregar_obreiros(self):
 
-        self.combo_obreiro.clear()
+        self.lista_obreiros.clear()
 
         obreiros = self.banco.listar_obreiros()
 
         for obreiro in obreiros:
 
-            self.combo_obreiro.addItem(
-                obreiro["nome"],
+            item = QListWidgetItem(
+                obreiro["nome"]
+            )
+
+            item.setData(
+                Qt.ItemDataRole.UserRole,
                 obreiro["id"]
             )
 
-    # =========================
+            item.setFlags(
+                item.flags()
+                | Qt.ItemFlag.ItemIsUserCheckable
+            )
+
+            item.setCheckState(
+                Qt.CheckState.Unchecked
+            )
+
+            self.lista_obreiros.addItem(
+                item
+            )
+
+    # ==================================================
+    # SELECIONAR TODOS
+    # ==================================================
+
+    def selecionar_todos(self):
+
+        for i in range(
+            self.lista_obreiros.count()
+        ):
+
+            item = self.lista_obreiros.item(i)
+
+            item.setCheckState(
+                Qt.CheckState.Checked
+            )
+
+    # ==================================================
+    # DESMARCAR TODOS
+    # ==================================================
+
+    def desmarcar_todos(self):
+
+        for i in range(
+            self.lista_obreiros.count()
+        ):
+
+            item = self.lista_obreiros.item(i)
+
+            item.setCheckState(
+                Qt.CheckState.Unchecked
+            )
+
+    # ==================================================
+    # PEGAR OBRIEIROS SELECIONADOS
+    # ==================================================
+
+    def obter_obreiros_selecionados(self):
+
+        obreiros_ids = []
+
+        for i in range(
+            self.lista_obreiros.count()
+        ):
+
+            item = self.lista_obreiros.item(i)
+
+            if item.checkState() == (
+                Qt.CheckState.Checked
+            ):
+
+                obreiro_id = item.data(
+                    Qt.ItemDataRole.UserRole
+                )
+
+                obreiros_ids.append(
+                    obreiro_id
+                )
+
+        return obreiros_ids
+
+    # ==================================================
     # ADICIONAR ESCALA
-    # =========================
+    # ==================================================
 
     def adicionar_escala(self):
 
-        if self.combo_obreiro.currentIndex() < 0:
+        obreiros_ids = (
+            self.obter_obreiros_selecionados()
+        )
+
+        if not obreiros_ids:
 
             QMessageBox.warning(
                 self,
                 "Atenção",
-                "Cadastre pelo menos um obreiro."
+                "Selecione pelo menos um obreiro."
             )
 
             return
 
-        data = self.data_santa_ceia.date().toString(
-            "yyyy-MM-dd"
+        data = (
+            self.data_santa_ceia
+            .date()
+            .toString("yyyy-MM-dd")
         )
 
-        obreiro_id = self.combo_obreiro.currentData()
+        # ----------------------------------------------
+        # VERIFICAR DATA DUPLICADA
+        # ----------------------------------------------
 
-        self.banco.adicionar_escala(
-            data,
-            obreiro_id
+        escalas = (
+            self.banco.listar_santa_ceias()
         )
 
-        self.carregar_escalas()
+        for escala in escalas:
 
-    # =========================
+            if escala["data"] == data:
+
+                QMessageBox.warning(
+                    self,
+                    "Atenção",
+                    "Já existe uma escala cadastrada "
+                    "para esta data."
+                )
+
+                return
+
+        # ----------------------------------------------
+        # SALVAR
+        # ----------------------------------------------
+
+        try:
+
+            self.banco.adicionar_santa_ceia(
+                data,
+                obreiros_ids
+            )
+
+            QMessageBox.information(
+                self,
+                "Sucesso",
+                "Escala da Santa Ceia adicionada "
+                "com sucesso!"
+            )
+
+            self.desmarcar_todos()
+
+            self.carregar_escalas()
+
+        except Exception as erro:
+
+            QMessageBox.critical(
+                self,
+                "Erro",
+                f"Não foi possível salvar a escala:\n\n{erro}"
+            )
+
+    # ==================================================
     # CARREGAR ESCALAS
-    # =========================
+    # ==================================================
 
     def carregar_escalas(self):
 
-        escalas = self.banco.listar_escalas()
+        escalas = (
+            self.banco.listar_santa_ceias()
+        )
 
         self.tabela.setRowCount(0)
 
@@ -205,7 +440,9 @@ class TelaMontarEscala(QWidget):
 
             linha = self.tabela.rowCount()
 
-            self.tabela.insertRow(linha)
+            self.tabela.insertRow(
+                linha
+            )
 
             data = QDate.fromString(
                 escala["data"],
@@ -236,13 +473,13 @@ class TelaMontarEscala(QWidget):
                 linha,
                 2,
                 QTableWidgetItem(
-                    escala["nome_obreiro"]
+                    escala["obreiros"] or ""
                 )
             )
 
-    # =========================
+    # ==================================================
     # EXCLUIR ESCALA
-    # =========================
+    # ==================================================
 
     def excluir_escala(self):
 
@@ -267,23 +504,28 @@ class TelaMontarEscala(QWidget):
 
         resposta = QMessageBox.question(
             self,
-            "Confirmar",
-            "Deseja excluir esta escala?"
+            "Confirmar exclusão",
+            "Deseja realmente excluir esta escala?"
         )
 
-        if resposta == QMessageBox.StandardButton.Yes:
+        if resposta == (
+            QMessageBox.StandardButton.Yes
+        ):
 
-            self.banco.excluir_escala(
+            self.banco.excluir_santa_ceia(
                 id_escala
             )
 
             self.carregar_escalas()
 
-    # =========================
+    # ==================================================
     # FECHAR
-    # =========================
+    # ==================================================
 
-    def closeEvent(self, event):
+    def closeEvent(
+        self,
+        event
+    ):
 
         self.banco.fechar()
 
