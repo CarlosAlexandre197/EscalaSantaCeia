@@ -200,6 +200,10 @@ class TelaMontarEscala(QWidget):
         layout_principal.addWidget(
             self.botao_adicionar
         )
+        
+        layout_principal.addWidget(
+            self.botao_salvar_edicao
+        )
 
         # ----------------------------------------------
         # ESCALAS CADASTRADAS
