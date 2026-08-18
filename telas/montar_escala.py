@@ -24,6 +24,7 @@ class TelaMontarEscala(QWidget):
         super().__init__()
 
         self.banco = Banco()
+        self.escala_editando_id = None
 
         self.setWindowTitle("Montar Escala - Santa Ceia")
         self.resize(900, 650)
