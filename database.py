@@ -332,6 +332,57 @@ class Banco:
         ))
 
         return cursor.fetchall()
+    
+    def atualizar_santa_ceia(
+        self,
+        santa_ceia_id,
+        data,
+        obreiros_ids
+    ):
+
+        cursor = self.conexao.cursor()
+
+        try:
+
+            # Atualiza a data
+            cursor.execute("""
+                UPDATE santa_ceias
+                SET data = ?
+                WHERE id = ?
+            """, (
+                data,
+                santa_ceia_id
+            ))
+
+            # Remove os participantes antigos
+            cursor.execute("""
+                DELETE FROM santa_ceia_obreiros
+                WHERE santa_ceia_id = ?
+            """, (
+                santa_ceia_id
+            ))
+
+            # Adiciona os novos participantes
+            for obreiro_id in obreiros_ids:
+
+                cursor.execute("""
+                    INSERT INTO santa_ceia_obreiros (
+                        santa_ceia_id,
+                        obreiro_id
+                    )
+                    VALUES (?, ?)
+                """, (
+                    santa_ceia_id,
+                    obreiro_id
+                ))
+
+            self.conexao.commit()
+
+        except Exception:
+
+            self.conexao.rollback()
+
+            raise
 
     def excluir_santa_ceia(
         self,
