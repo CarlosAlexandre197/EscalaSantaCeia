@@ -362,9 +362,10 @@ class TelaMontarEscala(QWidget):
                     Qt.ItemDataRole.UserRole
                 )
 
-                obreiros_ids.append(
-                    obreiro_id
-                )
+                if obreiro_id is not None:
+                    obreiros_ids.append(
+                        int(obreiro_id)
+                    )
 
         return obreiros_ids
 
