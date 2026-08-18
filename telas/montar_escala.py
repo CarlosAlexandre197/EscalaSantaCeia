@@ -275,7 +275,7 @@ class TelaMontarEscala(QWidget):
         )
 
     # ==================================================
-    # CARREGAR OBRIEIROS
+    # CARREGAR OBREIROS
     # ==================================================
 
     def carregar_obreiros(self):
