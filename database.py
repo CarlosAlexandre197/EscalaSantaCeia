@@ -344,26 +344,39 @@ class Banco:
 
         try:
 
+            santa_ceia_id = int(santa_ceia_id)
+
+            # ------------------------------------------
             # Atualiza a data
+            # ------------------------------------------
+
             cursor.execute("""
                 UPDATE santa_ceias
                 SET data = ?
                 WHERE id = ?
             """, (
-                data,
+                str(data),
                 santa_ceia_id
             ))
 
+            # ------------------------------------------
             # Remove os participantes antigos
+            # ------------------------------------------
+
             cursor.execute("""
                 DELETE FROM santa_ceia_obreiros
                 WHERE santa_ceia_id = ?
             """, (
-                santa_ceia_id
+                santa_ceia_id,
             ))
 
+            # ------------------------------------------
             # Adiciona os novos participantes
+            # ------------------------------------------
+
             for obreiro_id in obreiros_ids:
+
+                obreiro_id = int(obreiro_id)
 
                 cursor.execute("""
                     INSERT INTO santa_ceia_obreiros (
