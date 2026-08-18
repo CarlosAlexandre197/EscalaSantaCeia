@@ -173,6 +173,18 @@ class TelaMontarEscala(QWidget):
         self.botao_adicionar = QPushButton(
             "Adicionar Escala"
         )
+        
+        self.botao_salvar_edicao = QPushButton(
+            "Salvar Alterações"
+        )
+
+        self.botao_salvar_edicao.setEnabled(
+            False
+        )
+
+        self.botao_salvar_edicao.clicked.connect(
+            self.salvar_edicao
+        )
 
         self.botao_adicionar.setStyleSheet("""
             QPushButton {
