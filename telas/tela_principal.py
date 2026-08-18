@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
 
 from telas.cadastro_obreiros import TelaCadastroObreiros
 from telas.montar_escala import TelaMontarEscala
+from telas.visualizar_escala import TelaVisualizarEscala
 
 
 class TelaPrincipal(QMainWindow):
