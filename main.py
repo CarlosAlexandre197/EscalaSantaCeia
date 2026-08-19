@@ -2,6 +2,8 @@ import sys
 
 from PyQt6.QtWidgets import QApplication
 
+from style import ESTILO_GERAL
+
 from telas.tela_principal import TelaPrincipal
 
 
