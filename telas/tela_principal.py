@@ -200,3 +200,13 @@ class TelaPrincipal(QMainWindow):
         self.tela_visualizar.show()
         self.tela_visualizar.raise_()
         self.tela_visualizar.activateWindow()
+        
+    def abrir_configuracoes(self):
+
+        if self.tela_configuracoes is None:
+
+            self.tela_configuracoes = TelaConfiguracoes()
+
+        self.tela_configuracoes.show()
+        self.tela_configuracoes.raise_()
+        self.tela_configuracoes.activateWindow()
