@@ -1,3 +1,12 @@
+COR_AZUL = "#1976D2"
+COR_AZUL_ESCURO = "#0D47A1"
+
+COR_VERDE = "#2E7D32"
+COR_VERDE_CLARO = "#43A047"
+
+COR_FUNDO = "#f4f6f8"
+
+
 ESTILO_GERAL = """
 QWidget {
     background-color: #f4f6f8;
