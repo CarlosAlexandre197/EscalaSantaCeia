@@ -1,5 +1,3 @@
-from PyQt6.QtCore import Qt
-
 from PyQt6.QtWidgets import (
     QMainWindow,
     QWidget,
@@ -7,13 +5,22 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
-    QMessageBox
+    QFrame
 )
+
+from PyQt6.QtCore import Qt
 
 from telas.cadastro_obreiros import TelaCadastroObreiros
 from telas.montar_escala import TelaMontarEscala
 from telas.visualizar_escala import TelaVisualizarEscala
 from telas.configuracoes import TelaConfiguracoes
+
+from style import (
+    COR_AZUL,
+    COR_AZUL_ESCURO,
+    COR_VERDE,
+    COR_VERDE_CLARO
+)
 
 
 class TelaPrincipal(QMainWindow):
@@ -25,51 +32,170 @@ class TelaPrincipal(QMainWindow):
         self.tela_escala = None
         self.tela_visualizar = None
         self.tela_configuracoes = None
-        self.setWindowTitle("Escala Santa Ceia")
-        self.resize(1000, 650)
+
+        self.setWindowTitle(
+            "Escala Santa Ceia"
+        )
+
+        self.resize(
+            1000,
+            650
+        )
 
         self.criar_interface()
+
+    # ==================================================
+    # INTERFACE
+    # ==================================================
 
     def criar_interface(self):
 
         widget_central = QWidget()
-        self.setCentralWidget(widget_central)
+
+        self.setCentralWidget(
+            widget_central
+        )
 
         layout_principal = QVBoxLayout()
-        widget_central.setLayout(layout_principal)
 
-        # =========================
-        # TÍTULO
-        # =========================
+        layout_principal.setContentsMargins(
+            0,
+            0,
+            0,
+            0
+        )
 
-        titulo = QLabel("ESCALA SANTA CEIA")
+        layout_principal.setSpacing(0)
 
-        titulo.setStyleSheet("""
+        widget_central.setLayout(
+            layout_principal
+        )
+
+        # ==================================================
+        # BARRA AZUL SUPERIOR
+        # ==================================================
+
+        barra_superior = QFrame()
+
+        barra_superior.setFixedHeight(
+            70
+        )
+
+        barra_superior.setStyleSheet(f"""
+            QFrame {{
+                background-color: {COR_AZUL};
+            }}
+        """)
+
+        layout_barra_superior = QHBoxLayout()
+
+        layout_barra_superior.setContentsMargins(
+            25,
+            0,
+            25,
+            0
+        )
+
+        barra_superior.setLayout(
+            layout_barra_superior
+        )
+
+        titulo_barra = QLabel(
+            "ESCALA SANTA CEIA"
+        )
+
+        titulo_barra.setStyleSheet("""
             QLabel {
-                font-size: 28px;
+                color: white;
+                font-size: 24px;
                 font-weight: bold;
-                padding: 20px;
             }
+        """)
+
+        layout_barra_superior.addWidget(
+            titulo_barra
+        )
+
+        layout_barra_superior.addStretch()
+
+        subtitulo_barra = QLabel(
+            "Sistema de Gerenciamento"
+        )
+
+        subtitulo_barra.setStyleSheet("""
+            QLabel {
+                color: white;
+                font-size: 14px;
+            }
+        """)
+
+        layout_barra_superior.addWidget(
+            subtitulo_barra
+        )
+
+        layout_principal.addWidget(
+            barra_superior
+        )
+
+        # ==================================================
+        # ÁREA CENTRAL
+        # ==================================================
+
+        area_central = QWidget()
+
+        layout_central = QVBoxLayout()
+
+        layout_central.setContentsMargins(
+            40,
+            35,
+            40,
+            35
+        )
+
+        layout_central.setSpacing(
+            20
+        )
+
+        area_central.setLayout(
+            layout_central
+        )
+
+        # --------------------------------------------------
+        # TÍTULO
+        # --------------------------------------------------
+
+        titulo = QLabel(
+            "Bem-vindo ao sistema"
+        )
+
+        titulo.setStyleSheet(f"""
+            QLabel {{
+                color: {COR_AZUL_ESCURO};
+                font-size: 26px;
+                font-weight: bold;
+            }}
         """)
 
         titulo.setAlignment(
             Qt.AlignmentFlag.AlignCenter
         )
 
-        layout_principal.addWidget(titulo)
+        layout_central.addWidget(
+            titulo
+        )
 
-        # =========================
+        # --------------------------------------------------
         # SUBTÍTULO
-        # =========================
+        # --------------------------------------------------
 
         subtitulo = QLabel(
-            "Sistema de gerenciamento da escala mensal"
+            "Selecione uma opção para continuar"
         )
 
         subtitulo.setStyleSheet("""
             QLabel {
+                color: #555555;
                 font-size: 16px;
-                padding-bottom: 20px;
             }
         """)
 
@@ -77,13 +203,23 @@ class TelaPrincipal(QMainWindow):
             Qt.AlignmentFlag.AlignCenter
         )
 
-        layout_principal.addWidget(subtitulo)
+        layout_central.addWidget(
+            subtitulo
+        )
 
-        # =========================
+        layout_central.addSpacing(
+            20
+        )
+
+        # ==================================================
         # BOTÕES
-        # =========================
+        # ==================================================
 
-        layout_botoes = QHBoxLayout()
+        layout_linha_1 = QHBoxLayout()
+
+        layout_linha_1.setSpacing(
+            20
+        )
 
         self.botao_obreiros = QPushButton(
             "Cadastro de Obreiros"
@@ -92,7 +228,7 @@ class TelaPrincipal(QMainWindow):
         self.botao_escala = QPushButton(
             "Montar Escala"
         )
-        
+
         self.botao_visualizar = QPushButton(
             "Visualizar Escala"
         )
@@ -101,63 +237,171 @@ class TelaPrincipal(QMainWindow):
             "Configurações"
         )
 
+        # --------------------------------------------------
+        # CONEXÕES
+        # --------------------------------------------------
+
         self.botao_obreiros.clicked.connect(
             self.abrir_obreiros
         )
-        
+
         self.botao_escala.clicked.connect(
             self.abrir_escala
         )
-        
+
         self.botao_visualizar.clicked.connect(
-        self.abrir_visualizar
+            self.abrir_visualizar
         )
-        
+
         self.botao_configuracoes.clicked.connect(
             self.abrir_configuracoes
         )
 
-        layout_botoes.addWidget(
+        # --------------------------------------------------
+        # ESTILO DOS BOTÕES
+        # --------------------------------------------------
+
+        estilo_botao = f"""
+            QPushButton {{
+                background-color: {COR_AZUL};
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 18px;
+                font-size: 15px;
+                font-weight: bold;
+                min-height: 55px;
+            }}
+
+            QPushButton:hover {{
+                background-color: {COR_AZUL_ESCURO};
+            }}
+
+            QPushButton:pressed {{
+                background-color: {COR_VERDE};
+            }}
+        """
+
+        self.botao_obreiros.setStyleSheet(
+            estilo_botao
+        )
+
+        self.botao_escala.setStyleSheet(
+            estilo_botao
+        )
+
+        self.botao_visualizar.setStyleSheet(
+            estilo_botao
+        )
+
+        self.botao_configuracoes.setStyleSheet(
+            estilo_botao
+        )
+
+        layout_linha_1.addWidget(
             self.botao_obreiros
         )
 
-        layout_botoes.addWidget(
+        layout_linha_1.addWidget(
             self.botao_escala
         )
 
-        layout_botoes.addWidget(
+        layout_central.addLayout(
+            layout_linha_1
+        )
+
+        layout_linha_2 = QHBoxLayout()
+
+        layout_linha_2.setSpacing(
+            20
+        )
+
+        layout_linha_2.addWidget(
             self.botao_visualizar
         )
 
-        layout_botoes.addWidget(
+        layout_linha_2.addWidget(
             self.botao_configuracoes
         )
 
-        layout_principal.addLayout(
-            layout_botoes
+        layout_central.addLayout(
+            layout_linha_2
         )
 
-        layout_principal.addStretch()
+        layout_central.addStretch()
 
-        # =========================
-        # RODAPÉ
-        # =========================
+        layout_principal.addWidget(
+            area_central
+        )
+
+        # ==================================================
+        # BARRA VERDE INFERIOR
+        # ==================================================
+
+        barra_inferior = QFrame()
+
+        barra_inferior.setFixedHeight(
+            45
+        )
+
+        barra_inferior.setStyleSheet(f"""
+            QFrame {{
+                background-color: {COR_VERDE};
+            }}
+        """)
+
+        layout_barra_inferior = QHBoxLayout()
+
+        layout_barra_inferior.setContentsMargins(
+            20,
+            0,
+            20,
+            0
+        )
+
+        barra_inferior.setLayout(
+            layout_barra_inferior
+        )
 
         rodape = QLabel(
             "Sistema de Escala Santa Ceia"
         )
 
-        rodape.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
-        )
+        rodape.setStyleSheet("""
+            QLabel {
+                color: white;
+                font-size: 13px;
+            }
+        """)
 
-        layout_principal.addWidget(
+        layout_barra_inferior.addWidget(
             rodape
         )
 
-    # =========================
+        layout_barra_inferior.addStretch()
+
+        versao = QLabel(
+            "Versão 1.0"
+        )
+
+        versao.setStyleSheet("""
+            QLabel {
+                color: white;
+                font-size: 13px;
+            }
+        """)
+
+        layout_barra_inferior.addWidget(
+            versao
+        )
+
+        layout_principal.addWidget(
+            barra_inferior
+        )
+
+    # ==================================================
     # CADASTRO DE OBREIROS
-    # =========================
+    # ==================================================
 
     def abrir_obreiros(self):
 
@@ -169,18 +413,10 @@ class TelaPrincipal(QMainWindow):
         self.tela_obreiros.raise_()
         self.tela_obreiros.activateWindow()
 
-    # =========================
-    # BOTÕES AINDA NÃO IMPLEMENTADOS
-    # =========================
+    # ==================================================
+    # MONTAR ESCALA
+    # ==================================================
 
-    def em_desenvolvimento(self):
-
-        QMessageBox.information(
-            self,
-            "Em desenvolvimento",
-            "Esta função será implementada nas próximas etapas."
-        )
-        
     def abrir_escala(self):
 
         if self.tela_escala is None:
@@ -190,7 +426,11 @@ class TelaPrincipal(QMainWindow):
         self.tela_escala.show()
         self.tela_escala.raise_()
         self.tela_escala.activateWindow()
-        
+
+    # ==================================================
+    # VISUALIZAR ESCALA
+    # ==================================================
+
     def abrir_visualizar(self):
 
         if self.tela_visualizar is None:
@@ -200,7 +440,11 @@ class TelaPrincipal(QMainWindow):
         self.tela_visualizar.show()
         self.tela_visualizar.raise_()
         self.tela_visualizar.activateWindow()
-        
+
+    # ==================================================
+    # CONFIGURAÇÕES
+    # ==================================================
+
     def abrir_configuracoes(self):
 
         if self.tela_configuracoes is None:
