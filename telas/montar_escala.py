@@ -10,7 +10,8 @@ from PyQt6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QMessageBox,
-    QHeaderView
+    QHeaderView,
+    QFrame
 )
 
 from PyQt6.QtCore import QDate, Qt
