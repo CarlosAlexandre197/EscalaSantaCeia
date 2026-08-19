@@ -112,6 +112,10 @@ class TelaPrincipal(QMainWindow):
         self.botao_visualizar.clicked.connect(
         self.abrir_visualizar
         )
+        
+        self.botao_configuracoes.clicked.connect(
+            self.abrir_configuracoes
+        )
 
         layout_botoes.addWidget(
             self.botao_obreiros
