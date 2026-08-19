@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
 from telas.cadastro_obreiros import TelaCadastroObreiros
 from telas.montar_escala import TelaMontarEscala
 from telas.visualizar_escala import TelaVisualizarEscala
+from telas.configuracoes import TelaConfiguracoes
 
 
 class TelaPrincipal(QMainWindow):
@@ -23,7 +24,7 @@ class TelaPrincipal(QMainWindow):
         self.tela_obreiros = None
         self.tela_escala = None
         self.tela_visualizar = None
-
+        self.tela_configuracoes = None
         self.setWindowTitle("Escala Santa Ceia")
         self.resize(1000, 650)
 
