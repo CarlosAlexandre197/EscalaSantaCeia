@@ -41,37 +41,115 @@ class TelaMontarEscala(QWidget):
 
         layout_principal = QVBoxLayout()
 
-        # ----------------------------------------------
-        # TÍTULO
-        # ----------------------------------------------
-
-        titulo = QLabel(
-            "Montar Escala da Santa Ceia"
+        layout_principal.setContentsMargins(
+            0,
+            0,
+            0,
+            0
         )
 
-        titulo.setStyleSheet("""
+        layout_principal.setSpacing(0)
+
+        # ==================================================
+        # BARRA AZUL SUPERIOR
+        # ==================================================
+
+        barra_superior = QFrame()
+
+        barra_superior.setFixedHeight(65)
+
+        barra_superior.setStyleSheet(f"""
+            QFrame {{
+                background-color: {COR_AZUL};
+            }}
+        """)
+
+        layout_barra = QHBoxLayout()
+
+        layout_barra.setContentsMargins(
+            20,
+            0,
+            20,
+            0
+        )
+
+        barra_superior.setLayout(
+            layout_barra
+        )
+
+        titulo_barra = QLabel(
+            "MONTAR ESCALA DA SANTA CEIA"
+        )
+
+        titulo_barra.setStyleSheet("""
             QLabel {
-                font-size: 24px;
+                color: white;
+                font-size: 21px;
                 font-weight: bold;
-                padding: 15px;
             }
         """)
 
-        titulo.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
+        layout_barra.addWidget(
+            titulo_barra
         )
 
-        layout_principal.addWidget(titulo)
+        layout_barra.addStretch()
 
-        # ----------------------------------------------
+        sistema = QLabel(
+            "Escala Santa Ceia"
+        )
+
+        sistema.setStyleSheet("""
+            QLabel {
+                color: white;
+                font-size: 13px;
+            }
+        """)
+
+        layout_barra.addWidget(
+            sistema
+        )
+
+        layout_principal.addWidget(
+            barra_superior
+        )
+
+        # ==================================================
+        # ÁREA CENTRAL
+        # ==================================================
+
+        area_central = QWidget()
+
+        layout_central = QVBoxLayout()
+
+        layout_central.setContentsMargins(
+            30,
+            20,
+            30,
+            20
+        )
+
+        layout_central.setSpacing(12)
+
+        area_central.setLayout(
+            layout_central
+        )
+
+        # ==================================================
         # DATA
-        # ----------------------------------------------
+        # ==================================================
 
         layout_data = QHBoxLayout()
 
         label_data = QLabel(
             "Data da Santa Ceia:"
         )
+
+        label_data.setStyleSheet("""
+            QLabel {
+                font-weight: bold;
+            }
+        """)
 
         self.data_santa_ceia = QDateEdit()
 
@@ -97,26 +175,28 @@ class TelaMontarEscala(QWidget):
 
         layout_data.addStretch()
 
-        layout_principal.addLayout(
+        layout_central.addLayout(
             layout_data
         )
 
-        # ----------------------------------------------
+        # ==================================================
         # OBREIROS
-        # ----------------------------------------------
+        # ==================================================
 
         label_obreiros = QLabel(
             "Selecione os obreiros participantes:"
         )
 
-        label_obreiros.setStyleSheet("""
-            QLabel {
+        label_obreiros.setStyleSheet(f"""
+            QLabel {{
+                color: {COR_AZUL_ESCURO};
+                font-size: 16px;
                 font-weight: bold;
-                padding-top: 10px;
-            }
+                padding-top: 8px;
+            }}
         """)
 
-        layout_principal.addWidget(
+        layout_central.addWidget(
             label_obreiros
         )
 
@@ -126,13 +206,13 @@ class TelaMontarEscala(QWidget):
             180
         )
 
-        layout_principal.addWidget(
+        layout_central.addWidget(
             self.lista_obreiros
         )
 
-        # ----------------------------------------------
+        # ==================================================
         # BOTÕES DE SELEÇÃO
-        # ----------------------------------------------
+        # ==================================================
 
         layout_selecao = QHBoxLayout()
 
@@ -162,71 +242,122 @@ class TelaMontarEscala(QWidget):
 
         layout_selecao.addStretch()
 
-        layout_principal.addLayout(
+        layout_central.addLayout(
             layout_selecao
         )
 
-        # ----------------------------------------------
-        # ADICIONAR ESCALA
-        # ----------------------------------------------
+        # ==================================================
+        # BOTÕES DA ESCALA
+        # ==================================================
+
+        layout_escala = QHBoxLayout()
 
         self.botao_adicionar = QPushButton(
             "Adicionar Escala"
         )
-        
+
         self.botao_salvar_edicao = QPushButton(
             "Salvar Alterações"
+        )
+
+        self.botao_excluir = QPushButton(
+            "Excluir Escala Selecionada"
         )
 
         self.botao_salvar_edicao.setEnabled(
             False
         )
 
-        self.botao_salvar_edicao.clicked.connect(
-            self.salvar_edicao
-        )
-
-        self.botao_adicionar.setStyleSheet("""
-            QPushButton {
-                padding: 10px;
-                font-weight: bold;
-            }
-        """)
-
         self.botao_adicionar.clicked.connect(
             self.adicionar_escala
         )
 
-        layout_principal.addWidget(
+        self.botao_salvar_edicao.clicked.connect(
+            self.salvar_edicao
+        )
+
+        self.botao_excluir.clicked.connect(
+            self.excluir_escala
+        )
+
+        estilo_botao = f"""
+            QPushButton {{
+                background-color: {COR_AZUL};
+                color: white;
+                border: none;
+                border-radius: 6px;
+                padding: 10px 16px;
+                font-weight: bold;
+            }}
+
+            QPushButton:hover {{
+                background-color: {COR_AZUL_ESCURO};
+            }}
+
+            QPushButton:pressed {{
+                background-color: {COR_VERDE};
+            }}
+
+            QPushButton:disabled {{
+                background-color: #b0bec5;
+                color: #eeeeee;
+            }}
+        """
+
+        self.botao_adicionar.setStyleSheet(
+            estilo_botao
+        )
+
+        self.botao_salvar_edicao.setStyleSheet(
+            estilo_botao
+        )
+
+        self.botao_excluir.setStyleSheet(
+            estilo_botao
+        )
+
+        layout_escala.addWidget(
             self.botao_adicionar
         )
-        
-        layout_principal.addWidget(
+
+        layout_escala.addWidget(
             self.botao_salvar_edicao
         )
 
-        # ----------------------------------------------
+        layout_escala.addWidget(
+            self.botao_excluir
+        )
+
+        layout_central.addLayout(
+            layout_escala
+        )
+
+        # ==================================================
         # ESCALAS CADASTRADAS
-        # ----------------------------------------------
+        # ==================================================
 
         label_escalas = QLabel(
             "Escalas cadastradas:"
         )
 
-        label_escalas.setStyleSheet("""
-            QLabel {
+        label_escalas.setStyleSheet(f"""
+            QLabel {{
+                color: {COR_AZUL_ESCURO};
+                font-size: 16px;
                 font-weight: bold;
-                padding-top: 15px;
-            }
+                padding-top: 8px;
+            }}
         """)
 
-        layout_principal.addWidget(
+        layout_central.addWidget(
             label_escalas
         )
 
         self.tabela = QTableWidget()
 
-        self.tabela.setColumnCount(3)
+        self.tabela.setColumnCount(
+            3
+        )
 
         self.tabela.setHorizontalHeaderLabels([
             "ID",
@@ -245,29 +376,82 @@ class TelaMontarEscala(QWidget):
         self.tabela.setSelectionMode(
             QTableWidget.SelectionMode.SingleSelection
         )
-        
+
         self.tabela.cellClicked.connect(
             self.selecionar_escala
         )
 
-        layout_principal.addWidget(
+        layout_central.addWidget(
             self.tabela
         )
 
-        # ----------------------------------------------
-        # EXCLUIR ESCALA
-        # ----------------------------------------------
-
-        self.botao_excluir = QPushButton(
-            "Excluir Escala Selecionada"
+        layout_principal.addWidget(
+            area_central
         )
 
-        self.botao_excluir.clicked.connect(
-            self.excluir_escala
+        # ==================================================
+        # BARRA VERDE INFERIOR
+        # ==================================================
+
+        barra_inferior = QFrame()
+
+        barra_inferior.setFixedHeight(
+            40
+        )
+
+        barra_inferior.setStyleSheet(f"""
+            QFrame {{
+                background-color: {COR_VERDE};
+            }}
+        """)
+
+        layout_rodape = QHBoxLayout()
+
+        layout_rodape.setContentsMargins(
+            20,
+            0,
+            20,
+            0
+        )
+
+        barra_inferior.setLayout(
+            layout_rodape
+        )
+
+        rodape = QLabel(
+            "Montagem e gerenciamento das escalas"
+        )
+
+        rodape.setStyleSheet("""
+            QLabel {
+                color: white;
+                font-size: 12px;
+            }
+        """)
+
+        layout_rodape.addWidget(
+            rodape
+        )
+
+        layout_rodape.addStretch()
+
+        sistema = QLabel(
+            "Escala Santa Ceia"
+        )
+
+        sistema.setStyleSheet("""
+            QLabel {
+                color: white;
+                font-size: 12px;
+            }
+        """)
+
+        layout_rodape.addWidget(
+            sistema
         )
 
         layout_principal.addWidget(
-            self.botao_excluir
+            barra_inferior
         )
 
         self.setLayout(
