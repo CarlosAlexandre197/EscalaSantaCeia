@@ -10,6 +10,8 @@ from telas.tela_principal import TelaPrincipal
 def main():
 
     app = QApplication(sys.argv)
+    
+    app.setStyleSheet(ESTILO_GERAL)
 
     janela = TelaPrincipal()
     janela.show()
