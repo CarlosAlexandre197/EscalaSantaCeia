@@ -18,6 +18,11 @@ from PyQt6.QtCore import QDate, Qt
 
 from database import Banco
 
+from style import (
+    COR_AZUL,
+    COR_AZUL_ESCURO,
+    COR_VERDE
+)
 
 class TelaMontarEscala(QWidget):
 
