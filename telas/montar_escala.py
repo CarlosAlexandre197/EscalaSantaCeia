@@ -14,8 +14,6 @@ from PyQt6.QtWidgets import (
     QFrame
 )
 
-from database import Banco
-
 from PyQt6.QtCore import QDate, Qt
 
 from database import Banco
