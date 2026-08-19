@@ -43,32 +43,109 @@ class TelaVisualizarEscala(QWidget):
 
         layout_principal = QVBoxLayout()
 
-        titulo = QLabel(
-            "Visualizar Escala da Santa Ceia"
+        layout_principal.setContentsMargins(
+            0, 0, 0, 0
         )
 
-        titulo.setStyleSheet("""
+        layout_principal.setSpacing(0)
+
+        # ==================================================
+        # BARRA AZUL SUPERIOR
+        # ==================================================
+
+        barra_superior = QFrame()
+
+        barra_superior.setFixedHeight(65)
+
+        barra_superior.setStyleSheet(f"""
+            QFrame {{
+                background-color: {COR_AZUL};
+            }}
+        """)
+
+        layout_barra = QHBoxLayout()
+
+        layout_barra.setContentsMargins(
+            20, 0, 20, 0
+        )
+
+        barra_superior.setLayout(
+            layout_barra
+        )
+
+        titulo_barra = QLabel(
+            "VISUALIZAR ESCALA"
+        )
+
+        titulo_barra.setStyleSheet("""
             QLabel {
-                font-size: 24px;
+                color: white;
+                font-size: 22px;
                 font-weight: bold;
-                padding: 15px;
             }
         """)
 
-        titulo.setAlignment(
-            Qt.AlignmentFlag.AlignCenter
+        layout_barra.addWidget(
+            titulo_barra
         )
 
-        layout_principal.addWidget(titulo)
+        layout_barra.addStretch()
 
-        # ----------------------------------------------
-        # SELECIONAR ESCALA
-        # ----------------------------------------------
+        sistema = QLabel(
+            "Escala Santa Ceia"
+        )
 
-        layout_selecao = QHBoxLayout()
+        sistema.setStyleSheet("""
+            QLabel {
+                color: white;
+                font-size: 13px;
+            }
+        """)
 
-        label = QLabel(
+        layout_barra.addWidget(
+            sistema
+        )
+
+        layout_principal.addWidget(
+            barra_superior
+        )
+
+        # ==================================================
+        # ÁREA CENTRAL
+        # ==================================================
+
+        area_central = QWidget()
+
+        layout_central = QVBoxLayout()
+
+        layout_central.setContentsMargins(
+            30, 25, 30, 25
+        )
+
+        layout_central.setSpacing(15)
+
+        area_central.setLayout(
+            layout_central
+        )
+
+        # ==================================================
+        # SELEÇÃO DA ESCALA
+        # ==================================================
+
+        label_selecao = QLabel(
             "Selecione a Santa Ceia:"
+        )
+
+        label_selecao.setStyleSheet(f"""
+            QLabel {{
+                color: {COR_AZUL_ESCURO};
+                font-size: 16px;
+                font-weight: bold;
+            }}
+        """)
+
+        layout_central.addWidget(
+            label_selecao
         )
 
         self.combo_escalas = QComboBox()
@@ -77,38 +154,38 @@ class TelaVisualizarEscala(QWidget):
             self.mostrar_escala
         )
 
-        layout_selecao.addWidget(label)
-        layout_selecao.addWidget(
+        layout_central.addWidget(
             self.combo_escalas
         )
 
-        layout_principal.addLayout(
-            layout_selecao
-        )
-
-        # ----------------------------------------------
+        # ==================================================
         # DATA
-        # ----------------------------------------------
+        # ==================================================
 
         self.label_data = QLabel(
             "Data: -"
         )
 
-        self.label_data.setStyleSheet("""
-            QLabel {
-                font-size: 18px;
+        self.label_data.setStyleSheet(f"""
+            QLabel {{
+                color: {COR_AZUL_ESCURO};
+                font-size: 20px;
                 font-weight: bold;
-                padding: 10px;
-            }
+                padding: 8px;
+            }}
         """)
 
-        layout_principal.addWidget(
+        self.label_data.setAlignment(
+            Qt.AlignmentFlag.AlignCenter
+        )
+
+        layout_central.addWidget(
             self.label_data
         )
 
-        # ----------------------------------------------
+        # ==================================================
         # TABELA
-        # ----------------------------------------------
+        # ==================================================
 
         self.tabela = QTableWidget()
 
@@ -127,13 +204,13 @@ class TelaVisualizarEscala(QWidget):
             QTableWidget.EditTrigger.NoEditTriggers
         )
 
-        layout_principal.addWidget(
+        layout_central.addWidget(
             self.tabela
         )
 
-        # ----------------------------------------------
+        # ==================================================
         # BOTÕES
-        # ----------------------------------------------
+        # ==================================================
 
         layout_botoes = QHBoxLayout()
 
@@ -153,6 +230,33 @@ class TelaVisualizarEscala(QWidget):
             self.enviar_whatsapp
         )
 
+        estilo_botao = f"""
+            QPushButton {{
+                background-color: {COR_AZUL};
+                color: white;
+                border: none;
+                border-radius: 6px;
+                padding: 11px 18px;
+                font-weight: bold;
+            }}
+
+            QPushButton:hover {{
+                background-color: {COR_AZUL_ESCURO};
+            }}
+
+            QPushButton:pressed {{
+                background-color: {COR_VERDE};
+            }}
+        """
+
+        self.botao_pdf.setStyleSheet(
+            estilo_botao
+        )
+
+        self.botao_whatsapp.setStyleSheet(
+            estilo_botao
+        )
+
         layout_botoes.addWidget(
             self.botao_pdf
         )
@@ -161,8 +265,72 @@ class TelaVisualizarEscala(QWidget):
             self.botao_whatsapp
         )
 
-        layout_principal.addLayout(
+        layout_central.addLayout(
             layout_botoes
+        )
+
+        layout_principal.addWidget(
+            area_central
+        )
+
+        # ==================================================
+        # BARRA VERDE INFERIOR
+        # ==================================================
+
+        barra_inferior = QFrame()
+
+        barra_inferior.setFixedHeight(40)
+
+        barra_inferior.setStyleSheet(f"""
+            QFrame {{
+                background-color: {COR_VERDE};
+            }}
+        """)
+
+        layout_rodape = QHBoxLayout()
+
+        layout_rodape.setContentsMargins(
+            20, 0, 20, 0
+        )
+
+        barra_inferior.setLayout(
+            layout_rodape
+        )
+
+        rodape = QLabel(
+            "Visualização das escalas cadastradas"
+        )
+
+        rodape.setStyleSheet("""
+            QLabel {
+                color: white;
+                font-size: 12px;
+            }
+        """)
+
+        layout_rodape.addWidget(
+            rodape
+        )
+
+        layout_rodape.addStretch()
+
+        sistema = QLabel(
+            "Escala Santa Ceia"
+        )
+
+        sistema.setStyleSheet("""
+            QLabel {
+                color: white;
+                font-size: 12px;
+            }
+        """)
+
+        layout_rodape.addWidget(
+            sistema
+        )
+
+        layout_principal.addWidget(
+            barra_inferior
         )
 
         self.setLayout(
