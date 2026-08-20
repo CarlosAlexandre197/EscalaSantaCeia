@@ -554,12 +554,23 @@ class TelaMontarEscala(QWidget):
     # CONFIGURAR CALENDÁRIO
     # ==================================================
 
+    # ==================================================
+    # CONFIGURAR CALENDÁRIO
+    # ==================================================
+
     def configurar_calendario(self):
 
         calendario = self.data_santa_ceia.calendarWidget()
 
         # ==================================================
-        # ESTILO DO CALENDÁRIO
+        # TAMANHO DO CALENDÁRIO
+        # ==================================================
+
+        calendario.setMinimumWidth(360)
+        calendario.setMinimumHeight(300)
+
+        # ==================================================
+        # ESTILO
         # ==================================================
 
         calendario.setStyleSheet(f"""
@@ -577,7 +588,9 @@ class TelaMontarEscala(QWidget):
                 font-size: 14px;
                 font-weight: bold;
                 border: none;
-                padding: 6px;
+                padding: 4px;
+                min-width: 32px;
+                min-height: 30px;
             }}
 
             QCalendarWidget QToolButton:hover {{
@@ -590,6 +603,8 @@ class TelaMontarEscala(QWidget):
                 font-size: 14px;
                 font-weight: bold;
                 border: none;
+                min-width: 70px;
+                min-height: 30px;
             }}
 
             QCalendarWidget QAbstractItemView {{
@@ -602,29 +617,26 @@ class TelaMontarEscala(QWidget):
         """)
 
         # ==================================================
-        # CONFIGURAR CAMPO DO ANO
+        # LOCALIZAR O CAMPO DO ANO
         # ==================================================
 
         spinboxes = calendario.findChildren(QSpinBox)
 
         for spinbox in spinboxes:
 
-            # Limite de anos
             spinbox.setMinimum(2000)
             spinbox.setMaximum(2100)
 
-            # Garante que as setas padrão estejam disponíveis
             spinbox.setButtonSymbols(
                 QSpinBox.ButtonSymbols.UpDownArrows
             )
 
-            # Permite digitar o ano
-            spinbox.setKeyboardTracking(True)
+            spinbox.setMinimumWidth(70)
 
-            # Mantém o controle habilitado
+            spinbox.setMinimumHeight(30)
+
             spinbox.setEnabled(True)
 
-            # Garante que possa receber foco
             spinbox.setFocusPolicy(
                 Qt.FocusPolicy.StrongFocus
             )
