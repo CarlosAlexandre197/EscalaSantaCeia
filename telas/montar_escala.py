@@ -640,7 +640,20 @@ class TelaMontarEscala(QWidget):
             spinbox.setFocusPolicy(
                 Qt.FocusPolicy.StrongFocus
             )
-    
+            
+            print(
+                "ANO:",
+                spinbox.value(),
+                "MIN:",
+                spinbox.minimum(),
+                "MAX:",
+                spinbox.maximum(),
+                "ENABLED:",
+                spinbox.isEnabled(),
+                "READONLY:",
+                spinbox.isReadOnly()
+            )
+                
 
     # ==================================================
     # CARREGAR OBREIROS
