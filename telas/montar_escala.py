@@ -167,8 +167,29 @@ class TelaMontarEscala(QWidget):
             "dd/MM/yyyy"
         )
 
+        # Aumenta o tamanho do campo
+        self.data_santa_ceia.setMinimumWidth(
+            140
+        )
+
+        self.data_santa_ceia.setFixedHeight(
+            35
+        )
+
+        # Permite iniciar sem uma data selecionada
+        data_inicial = QDate(2000, 1, 1)
+
+        self.data_santa_ceia.setMinimumDate(
+            data_inicial
+        )
+
         self.data_santa_ceia.setDate(
-            QDate.currentDate()
+            data_inicial
+        )
+
+        # Texto exibido enquanto nenhuma data foi escolhida
+        self.data_santa_ceia.setSpecialValueText(
+            "Selecione..."
         )
 
         layout_data.addWidget(
