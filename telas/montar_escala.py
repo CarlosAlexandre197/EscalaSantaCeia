@@ -151,6 +151,14 @@ class TelaMontarEscala(QWidget):
             "Data da Santa Ceia:"
         )
 
+        label_data.setStyleSheet(f"""
+            QLabel {{
+                color: {COR_AZUL_ESCURO};
+                font-size: 15px;
+                font-weight: bold;
+            }}
+        """)
+
         label_data.setStyleSheet("""
             QLabel {
                 font-weight: bold;
