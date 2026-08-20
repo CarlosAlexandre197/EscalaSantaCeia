@@ -558,9 +558,9 @@ class TelaMontarEscala(QWidget):
 
         calendario = self.data_santa_ceia.calendarWidget()
 
-        # ----------------------------------------------
+        # ==================================================
         # ESTILO DO CALENDÁRIO
-        # ----------------------------------------------
+        # ==================================================
 
         calendario.setStyleSheet(f"""
             QCalendarWidget {{
@@ -592,18 +592,6 @@ class TelaMontarEscala(QWidget):
                 border: none;
             }}
 
-            QCalendarWidget QSpinBox::up-button {{
-                width: 20px;
-                height: 15px;
-                background-color: {COR_AZUL};
-            }}
-
-            QCalendarWidget QSpinBox::down-button {{
-                width: 20px;
-                height: 15px;
-                background-color: {COR_AZUL};
-            }}
-
             QCalendarWidget QAbstractItemView {{
                 background-color: white;
                 color: #1f2937;
@@ -613,22 +601,34 @@ class TelaMontarEscala(QWidget):
             }}
         """)
 
-        # ----------------------------------------------
-        # LOCALIZA O CAMPO DO ANO
-        # ----------------------------------------------
+        # ==================================================
+        # CONFIGURAR CAMPO DO ANO
+        # ==================================================
 
         spinboxes = calendario.findChildren(QSpinBox)
 
         for spinbox in spinboxes:
 
-            # Mantém o ano dentro de uma faixa adequada
-            spinbox.setMinimum(1900)
+            # Limite de anos
+            spinbox.setMinimum(2000)
             spinbox.setMaximum(2100)
 
-            # Garante que o spinbox possa receber foco
+            # Garante que as setas padrão estejam disponíveis
+            spinbox.setButtonSymbols(
+                QSpinBox.ButtonSymbols.UpDownArrows
+            )
+
+            # Permite digitar o ano
+            spinbox.setKeyboardTracking(True)
+
+            # Mantém o controle habilitado
+            spinbox.setEnabled(True)
+
+            # Garante que possa receber foco
             spinbox.setFocusPolicy(
                 Qt.FocusPolicy.StrongFocus
             )
+    
 
     # ==================================================
     # CARREGAR OBREIROS
