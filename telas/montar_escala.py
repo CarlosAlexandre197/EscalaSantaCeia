@@ -251,6 +251,27 @@ class TelaMontarEscala(QWidget):
             QCalendarWidget QSpinBox {{
                 color: #1f2937;
                 background-color: white;
+                border: none;
+                min-width: 65px;
+            }}
+
+            QCalendarWidget QSpinBox::up-button {{
+                subcontrol-origin: border;
+                subcontrol-position: top right;
+                width: 18px;
+                height: 12px;
+            }}
+
+            QCalendarWidget QSpinBox::down-button {{
+                subcontrol-origin: border;
+                subcontrol-position: bottom right;
+                width: 18px;
+                height: 12px;
+            }}
+
+            QCalendarWidget QSpinBox::up-button:hover,
+            QCalendarWidget QSpinBox::down-button:hover {{
+                background-color: #e0e0e0;
             }}
 
             QCalendarWidget QAbstractItemView {{
