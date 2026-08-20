@@ -200,8 +200,6 @@ class TelaMontarEscala(QWidget):
         self.data_santa_ceia.setSpecialValueText(
             "Selecione..."
         )
-        
-        self.configurar_calendario()
 
         # ==================================================
         # ESTILO DO CAMPO DE DATA
@@ -256,6 +254,8 @@ class TelaMontarEscala(QWidget):
                 outline: none;
             }}
         """)
+        
+        self.configurar_calendario()
 
         layout_data.addWidget(
             label_data
