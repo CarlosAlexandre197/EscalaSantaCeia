@@ -24,6 +24,7 @@ from style import (
     COR_VERDE
 )
 
+
 class TelaMontarEscala(QWidget):
 
     def __init__(self):
@@ -159,12 +160,6 @@ class TelaMontarEscala(QWidget):
             }}
         """)
 
-        label_data.setStyleSheet("""
-            QLabel {
-                font-weight: bold;
-            }
-        """)
-
         self.data_santa_ceia = QDateEdit()
 
         self.data_santa_ceia.setCalendarPopup(
@@ -175,7 +170,6 @@ class TelaMontarEscala(QWidget):
             "dd/MM/yyyy"
         )
 
-        # Aumenta o tamanho do campo
         self.data_santa_ceia.setMinimumWidth(
             140
         )
@@ -184,8 +178,15 @@ class TelaMontarEscala(QWidget):
             35
         )
 
-        # Permite iniciar sem uma data selecionada
-        data_inicial = QDate(2000, 1, 1)
+        # ==================================================
+        # DATA INICIAL
+        # ==================================================
+
+        data_inicial = QDate(
+            2000,
+            1,
+            1
+        )
 
         self.data_santa_ceia.setMinimumDate(
             data_inicial
@@ -195,11 +196,14 @@ class TelaMontarEscala(QWidget):
             data_inicial
         )
 
-        # Texto exibido enquanto nenhuma data foi escolhida
         self.data_santa_ceia.setSpecialValueText(
             "Selecione..."
         )
-        
+
+        # ==================================================
+        # ESTILO DO CAMPO DE DATA
+        # ==================================================
+
         self.data_santa_ceia.setStyleSheet(f"""
             QDateEdit {{
                 background-color: white;
@@ -233,18 +237,13 @@ class TelaMontarEscala(QWidget):
                 background-color: white;
             }}
 
-            QCalendarWidget QToolButton {{
-                color: white;
-                background-color: {COR_AZUL};
-                font-size: 14px;
-                font-weight: bold;
-                border: none;
-                padding: 6px;
-            }}
-
-            QCalendarWidget QToolButton:hover {{
-                background-color: {COR_AZUL_ESCURO};
-            }}
+            /*
+            IMPORTANTE:
+            Não estamos mais estilizando todos os
+            QToolButton do calendário.
+            Isso evita interferência nas setas
+            de alteração do mês e do ano.
+            */
 
             QCalendarWidget QAbstractItemView {{
                 background-color: white;
@@ -615,7 +614,7 @@ class TelaMontarEscala(QWidget):
             )
 
     # ==================================================
-    # PEGAR OBRIEIROS SELECIONADOS
+    # PEGAR OBREIROS SELECIONADOS
     # ==================================================
 
     def obter_obreiros_selecionados(self):
@@ -826,7 +825,11 @@ class TelaMontarEscala(QWidget):
         self.banco.fechar()
 
         event.accept()
-        
+
+    # ==================================================
+    # SELECIONAR ESCALA
+    # ==================================================
+
     def selecionar_escala(
         self,
         linha,
@@ -847,10 +850,12 @@ class TelaMontarEscala(QWidget):
         if not escalas:
             return
 
-        # Guarda qual escala estamos editando
         self.escala_editando_id = escala_id
 
-        # Data
+        # ----------------------------------------------
+        # DATA
+        # ----------------------------------------------
+
         data = QDate.fromString(
             escalas[0]["data"],
             "yyyy-MM-dd"
@@ -860,13 +865,15 @@ class TelaMontarEscala(QWidget):
             data
         )
 
-        # IDs dos obreiros participantes
+        # ----------------------------------------------
+        # OBREIROS PARTICIPANTES
+        # ----------------------------------------------
+
         obreiros_selecionados = {
             escala["obreiro_id"]
             for escala in escalas
         }
 
-        # Marca/desmarca os obreiros
         for i in range(
             self.lista_obreiros.count()
         ):
@@ -889,7 +896,10 @@ class TelaMontarEscala(QWidget):
                     Qt.CheckState.Unchecked
                 )
 
-        # Ativa o botão de edição
+        # ----------------------------------------------
+        # BOTÕES
+        # ----------------------------------------------
+
         self.botao_salvar_edicao.setEnabled(
             True
         )
@@ -897,7 +907,11 @@ class TelaMontarEscala(QWidget):
         self.botao_adicionar.setEnabled(
             False
         )
-        
+
+    # ==================================================
+    # SALVAR EDIÇÃO
+    # ==================================================
+
     def salvar_edicao(self):
 
         if self.escala_editando_id is None:
@@ -948,7 +962,11 @@ class TelaMontarEscala(QWidget):
                 "Erro",
                 f"Não foi possível atualizar a escala:\n\n{erro}"
             )
-            
+
+    # ==================================================
+    # CANCELAR EDIÇÃO
+    # ==================================================
+
     def cancelar_edicao(self):
 
         self.escala_editando_id = None
