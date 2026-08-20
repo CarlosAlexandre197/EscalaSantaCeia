@@ -191,6 +191,32 @@ class TelaMontarEscala(QWidget):
         self.data_santa_ceia.setSpecialValueText(
             "Selecione..."
         )
+        
+        self.data_santa_ceia.setStyleSheet(f"""
+            QDateEdit {{
+                background-color: white;
+                color: #1f2937;
+                border: 1px solid #b0bec5;
+                border-radius: 6px;
+                padding: 6px 10px;
+                font-size: 14px;
+                min-width: 140px;
+            }}
+
+            QDateEdit:hover {{
+                border: 2px solid {COR_AZUL};
+            }}
+
+            QDateEdit:focus {{
+                border: 2px solid {COR_AZUL};
+            }}
+
+            QDateEdit::drop-down {{
+                width: 32px;
+                border-left: 1px solid #b0bec5;
+                background-color: {COR_AZUL};
+            }}
+        """)
 
         layout_data.addWidget(
             label_data
