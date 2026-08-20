@@ -11,7 +11,8 @@ from PyQt6.QtWidgets import (
     QTableWidgetItem,
     QMessageBox,
     QHeaderView,
-    QFrame
+    QFrame,
+    QCalendarWidget
 )
 
 from PyQt6.QtCore import QDate, Qt
