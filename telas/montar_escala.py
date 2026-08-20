@@ -224,6 +224,42 @@ class TelaMontarEscala(QWidget):
                 border-left: 1px solid #b0bec5;
                 background-color: {COR_AZUL};
             }}
+
+            QCalendarWidget {{
+                background-color: white;
+                color: #1f2937;
+            }}
+
+            QCalendarWidget QWidget {{
+                background-color: white;
+                color: #1f2937;
+            }}
+
+            QCalendarWidget QToolButton {{
+                color: white;
+                background-color: {COR_AZUL};
+                font-size: 14px;
+                font-weight: bold;
+                border: none;
+                padding: 6px;
+            }}
+
+            QCalendarWidget QToolButton:hover {{
+                background-color: {COR_AZUL_ESCURO};
+            }}
+
+            QCalendarWidget QSpinBox {{
+                color: #1f2937;
+                background-color: white;
+            }}
+
+            QCalendarWidget QAbstractItemView {{
+                background-color: white;
+                color: #1f2937;
+                selection-background-color: {COR_AZUL};
+                selection-color: white;
+                outline: none;
+            }}
         """)
 
         layout_data.addWidget(
