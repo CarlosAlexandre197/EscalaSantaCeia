@@ -549,10 +549,90 @@ class TelaMontarEscala(QWidget):
         self.setLayout(
             layout_principal
         )
+        
+    # ==================================================
+    # CONFIGURAR CALENDÁRIO
+    # ==================================================
 
-    # ==================================================
-    # CARREGAR OBREIROS
-    # ==================================================
+    def configurar_calendario(self):
+
+        calendario = self.data_santa_ceia.calendarWidget()
+
+        # ----------------------------------------------
+        # ESTILO DO CALENDÁRIO
+        # ----------------------------------------------
+
+        calendario.setStyleSheet(f"""
+            QCalendarWidget {{
+                background-color: white;
+            }}
+
+            QCalendarWidget QWidget {{
+                background-color: white;
+            }}
+
+            QCalendarWidget QToolButton {{
+                color: white;
+                background-color: {COR_AZUL};
+                font-size: 14px;
+                font-weight: bold;
+                border: none;
+                padding: 6px;
+            }}
+
+            QCalendarWidget QToolButton:hover {{
+                background-color: {COR_AZUL_ESCURO};
+            }}
+
+            QCalendarWidget QSpinBox {{
+                color: white;
+                background-color: {COR_AZUL};
+                font-size: 14px;
+                font-weight: bold;
+                border: none;
+            }}
+
+            QCalendarWidget QSpinBox::up-button {{
+                width: 20px;
+                height: 15px;
+                background-color: {COR_AZUL};
+            }}
+
+            QCalendarWidget QSpinBox::down-button {{
+                width: 20px;
+                height: 15px;
+                background-color: {COR_AZUL};
+            }}
+
+            QCalendarWidget QAbstractItemView {{
+                background-color: white;
+                color: #1f2937;
+                selection-background-color: {COR_AZUL};
+                selection-color: white;
+                outline: none;
+            }}
+        """)
+
+        # ----------------------------------------------
+        # LOCALIZA O CAMPO DO ANO
+        # ----------------------------------------------
+
+        spinboxes = calendario.findChildren(QSpinBox)
+
+        for spinbox in spinboxes:
+
+            # Mantém o ano dentro de uma faixa adequada
+            spinbox.setMinimum(1900)
+            spinbox.setMaximum(2100)
+
+            # Garante que o spinbox possa receber foco
+            spinbox.setFocusPolicy(
+                Qt.FocusPolicy.StrongFocus
+            )
+
+        # ==================================================
+        # CARREGAR OBREIROS
+        # ==================================================
 
     def carregar_obreiros(self):
 
