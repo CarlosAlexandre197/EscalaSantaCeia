@@ -630,9 +630,9 @@ class TelaMontarEscala(QWidget):
                 Qt.FocusPolicy.StrongFocus
             )
 
-        # ==================================================
-        # CARREGAR OBREIROS
-        # ==================================================
+    # ==================================================
+    # CARREGAR OBREIROS
+    # ==================================================
 
     def carregar_obreiros(self):
 
