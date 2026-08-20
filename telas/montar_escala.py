@@ -12,7 +12,6 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QHeaderView,
     QFrame,
-    QCalendarWidget,
     QSpinBox
 )
 
