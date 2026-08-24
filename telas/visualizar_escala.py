@@ -343,7 +343,17 @@ class TelaVisualizarEscala(QWidget):
 
     def carregar_escalas(self):
 
+        # Bloqueia o sinal para não chamar mostrar_escala()
+        # enquanto estamos preenchendo o ComboBox
+        self.combo_escalas.blockSignals(True)
+
         self.combo_escalas.clear()
+
+        # Primeiro item
+        self.combo_escalas.addItem(
+            "Selecione",
+            None
+        )
 
         escalas = (
             self.banco.listar_santa_ceias()
@@ -372,13 +382,13 @@ class TelaVisualizarEscala(QWidget):
                 escala["id"]
             )
 
-        self.combo_escalas.insertItem(
-        0,
-        "Selecione"
-        )
-
+        # Deixa "Selecione" selecionado
         self.combo_escalas.setCurrentIndex(0)
 
+        # Libera os sinais novamente
+        self.combo_escalas.blockSignals(False)
+
+        # Limpa a visualização
         self.label_data.setText(
             "Data: -"
         )
