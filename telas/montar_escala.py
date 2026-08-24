@@ -16,7 +16,8 @@ from PyQt6.QtWidgets import (
     QAbstractButton
 )
 
-from PyQt6.QtCore import QDate, Qt
+from PyQt6.QtCore import QDate, Qt, QEvent
+from PyQt6.QtGui import QCursor
 
 from database import Banco
 
