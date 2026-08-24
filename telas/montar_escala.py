@@ -12,7 +12,8 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QHeaderView,
     QFrame,
-    QSpinBox
+    QSpinBox,
+    QAbstractButton
 )
 
 from PyQt6.QtCore import QDate, Qt
@@ -621,6 +622,38 @@ class TelaMontarEscala(QWidget):
         # ==================================================
 
         spinboxes = calendario.findChildren(QSpinBox)
+        
+        print("\n========== CONTROLES DO CALENDÁRIO ==========")
+
+        for spinbox in spinboxes:
+
+            print(
+                "SPINBOX:",
+                spinbox.objectName(),
+                "|",
+                "ANO:",
+                spinbox.value(),
+                "|",
+                "ENABLED:",
+                spinbox.isEnabled()
+            )
+
+            botoes = spinbox.findChildren(QAbstractButton)
+
+            for botao in botoes:
+
+                print(
+                    "  BOTÃO:",
+                    botao.objectName(),
+                    "|",
+                    "ENABLED:",
+                    botao.isEnabled(),
+                    "|",
+                    "VISIBLE:",
+                    botao.isVisible()
+                )
+
+        print("==============================================\n")
 
         for spinbox in spinboxes:
 
