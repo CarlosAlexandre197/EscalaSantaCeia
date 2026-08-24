@@ -15,7 +15,7 @@ from PyQt6.QtWidgets import (
     QSpinBox,
 )
 
-from PyQt6.QtCore import QDate, Qt, QEvent
+from PyQt6.QtCore import QDate, Qt
 from database import Banco
 
 from style import (
