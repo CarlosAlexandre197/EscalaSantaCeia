@@ -624,37 +624,6 @@ class TelaMontarEscala(QWidget):
 
         spinboxes = calendario.findChildren(QSpinBox)
         
-        print("\n========== CONTROLES DO CALENDÁRIO ==========")
-
-        for spinbox in spinboxes:
-
-            print(
-                "SPINBOX:",
-                spinbox.objectName(),
-                "|",
-                "ANO:",
-                spinbox.value(),
-                "|",
-                "ENABLED:",
-                spinbox.isEnabled()
-            )
-
-            botoes = spinbox.findChildren(QAbstractButton)
-
-            for botao in botoes:
-
-                print(
-                    "  BOTÃO:",
-                    botao.objectName(),
-                    "|",
-                    "ENABLED:",
-                    botao.isEnabled(),
-                    "|",
-                    "VISIBLE:",
-                    botao.isVisible()
-                )
-
-        print("==============================================\n")
 
         for spinbox in spinboxes:
 
@@ -674,6 +643,10 @@ class TelaMontarEscala(QWidget):
             spinbox.setFocusPolicy(
                 Qt.FocusPolicy.StrongFocus
             )
+            
+            # Intercepta os cliques nas setas
+            
+            spinbox.installEventFilter(self)
             
             print(
                 "ANO:",
