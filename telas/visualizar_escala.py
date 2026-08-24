@@ -372,17 +372,18 @@ class TelaVisualizarEscala(QWidget):
                 escala["id"]
             )
 
-        if self.combo_escalas.count() > 0:
+        self.combo_escalas.insertItem(
+        0,
+        "Selecione"
+        )
 
-            self.mostrar_escala(0)
+        self.combo_escalas.setCurrentIndex(0)
 
-        else:
+        self.label_data.setText(
+            "Data: -"
+        )
 
-            self.label_data.setText(
-                "Data: -"
-            )
-
-            self.tabela.setRowCount(0)
+        self.tabela.setRowCount(0)
 
     # ==================================================
     # MOSTRAR ESCALA
