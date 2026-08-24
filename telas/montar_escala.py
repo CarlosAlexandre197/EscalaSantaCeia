@@ -660,7 +660,76 @@ class TelaMontarEscala(QWidget):
                 "READONLY:",
                 spinbox.isReadOnly()
             )
-                
+        
+# ==================================================
+# CONTROLAR SETAS DO ANO
+# ==================================================
+
+    def eventFilter(self, obj, event):
+
+        if isinstance(obj, QSpinBox):
+
+            # Movimento do mouse
+            if event.type() == QEvent.Type.MouseMove:
+
+                largura = obj.width()
+                altura = obj.height()
+
+                # Área aproximada das setas
+                if event.position().x() >= largura - 25:
+
+                    obj.setCursor(
+                        QCursor(
+                            Qt.CursorShape.PointingHandCursor
+                        )
+                    )
+
+                else:
+
+                    obj.setCursor(
+                        QCursor(
+                            Qt.CursorShape.ArrowCursor
+                        )
+                    )
+
+            # Clique do mouse
+            elif event.type() == QEvent.Type.MouseButtonPress:
+
+                if event.button() == (
+                    Qt.MouseButton.LeftButton
+                ):
+
+                    largura = obj.width()
+                    altura = obj.height()
+
+                    x = event.position().x()
+                    y = event.position().y()
+
+                    # Verifica se clicou na área das setas
+                    if x >= largura - 25:
+
+                        # Parte superior = aumentar ano
+                        if y < altura / 2:
+
+                            if obj.value() < obj.maximum():
+
+                                obj.stepUp()
+
+                            return True
+
+                        # Parte inferior = diminuir ano
+                        else:
+
+                            if obj.value() > obj.minimum():
+
+                                obj.stepDown()
+
+                            return True
+
+        return super().eventFilter(
+            obj,
+            event
+        ) 
 
     # ==================================================
     # CARREGAR OBREIROS
