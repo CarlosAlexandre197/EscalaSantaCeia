@@ -391,7 +391,13 @@ class TelaVisualizarEscala(QWidget):
 
     def mostrar_escala(self, index):
 
-        if index < 0:
+        if index <= 0:
+            self.label_data.setText(
+                "Data: -"
+            )
+
+            self.tabela.setRowCount(0)
+
             return
 
         escala_id = (
