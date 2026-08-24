@@ -416,6 +416,9 @@ class TelaVisualizarEscala(QWidget):
 
         if escala_id is None:
             return
+        
+        print("ID SELECIONADO:", escala_id)
+        print("CONEXÃO BANCO:", self.banco.conexao)
 
         registros = (
             self.banco.buscar_santa_ceia(
