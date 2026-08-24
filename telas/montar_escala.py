@@ -13,11 +13,7 @@ from PyQt6.QtWidgets import (
     QHeaderView,
     QFrame,
     QSpinBox,
-    QAbstractButton
 )
-
-from PyQt6.QtCore import QDate, Qt, QEvent
-from PyQt6.QtGui import QCursor
 
 from database import Banco
 
@@ -560,19 +556,26 @@ class TelaMontarEscala(QWidget):
     # CONFIGURAR CALENDÁRIO
     # ==================================================
 
+    # ==================================================
+# CONFIGURAR CALENDÁRIO
+# ==================================================
+
     def configurar_calendario(self):
 
         calendario = self.data_santa_ceia.calendarWidget()
 
+        # Guarda referência do calendário
+        self.calendario = calendario
+
         # ==================================================
-        # TAMANHO DO CALENDÁRIO
+        # TAMANHO
         # ==================================================
 
         calendario.setMinimumWidth(360)
         calendario.setMinimumHeight(300)
 
         # ==================================================
-        # ESTILO
+        # ESTILO DO CALENDÁRIO
         # ==================================================
 
         calendario.setStyleSheet(f"""
@@ -605,7 +608,7 @@ class TelaMontarEscala(QWidget):
                 font-size: 14px;
                 font-weight: bold;
                 border: none;
-                min-width: 70px;
+                min-width: 80px;
                 min-height: 30px;
             }}
 
@@ -619,118 +622,145 @@ class TelaMontarEscala(QWidget):
         """)
 
         # ==================================================
-        # LOCALIZAR O CAMPO DO ANO
+        # LOCALIZAR CAMPO DO ANO
         # ==================================================
 
         spinboxes = calendario.findChildren(QSpinBox)
+
+        if not spinboxes:
+            return
+
+        self.ano_calendario = spinboxes[0]
+
+        # ==================================================
+        # CONFIGURAÇÃO DO ANO
+        # ==================================================
+
+        self.ano_calendario.setMinimum(2000)
+        self.ano_calendario.setMaximum(2100)
+
+        # Remove as setas nativas do Qt
+        self.ano_calendario.setButtonSymbols(
+            QSpinBox.ButtonSymbols.NoButtons
+        )
+
+        self.ano_calendario.setMinimumWidth(80)
+
+        self.ano_calendario.setEnabled(True)
+
+        # ==================================================
+        # BOTÃO AUMENTAR ANO
+        # ==================================================
+
+        self.botao_ano_cima = QPushButton(
+            "▲",
+            self.ano_calendario
+        )
+
+        self.botao_ano_cima.setCursor(
+            Qt.CursorShape.PointingHandCursor
+        )
+
+        self.botao_ano_cima.setStyleSheet(f"""
+            QPushButton {{
+                color: white;
+                background-color: {COR_AZUL};
+                border: none;
+                font-size: 10px;
+                font-weight: bold;
+                padding: 0px;
+                margin: 0px;
+            }}
+
+            QPushButton:hover {{
+                background-color: {COR_AZUL_ESCURO};
+            }}
+
+            QPushButton:pressed {{
+                background-color: {COR_VERDE};
+            }}
+        """)
+
+        # ==================================================
+        # BOTÃO DIMINUIR ANO
+        # ==================================================
+
+        self.botao_ano_baixo = QPushButton(
+            "▼",
+            self.ano_calendario
+        )
+
+        self.botao_ano_baixo.setCursor(
+            Qt.CursorShape.PointingHandCursor
+        )
+
+        self.botao_ano_baixo.setStyleSheet(f"""
+            QPushButton {{
+                color: white;
+                background-color: {COR_AZUL};
+                border: none;
+                font-size: 10px;
+                font-weight: bold;
+                padding: 0px;
+                margin: 0px;
+            }}
+
+            QPushButton:hover {{
+                background-color: {COR_AZUL_ESCURO};
+            }}
+
+            QPushButton:pressed {{
+                background-color: {COR_VERDE};
+            }}
+        """)
+
+        # ==================================================
+        # POSICIONAR OS BOTÕES
+        # ==================================================
+
+        largura_botao = 20
+
+        self.botao_ano_cima.setGeometry(
+            self.ano_calendario.width() - largura_botao,
+            0,
+            largura_botao,
+            self.ano_calendario.height() // 2
+        )
+
+        self.botao_ano_baixo.setGeometry(
+            self.ano_calendario.width() - largura_botao,
+            self.ano_calendario.height() // 2,
+            largura_botao,
+            self.ano_calendario.height() // 2
+        )
+
+        # ==================================================
+        # CLIQUES
+        # ==================================================
+
+        self.botao_ano_cima.clicked.connect(
+            self.aumentar_ano
+        )
+
+        self.botao_ano_baixo.clicked.connect(
+            self.diminuir_ano
+        )
+
+        # ==================================================
+        # GARANTE QUE OS BOTÕES FIQUEM VISÍVEIS
+        # ==================================================
+
+        self.botao_ano_cima.show()
+        self.botao_ano_baixo.show()
+
+        self.botao_ano_cima.raise_()
+        self.botao_ano_baixo.raise_()
+
+        print(
+            "ANO CONFIGURADO:",
+            self.ano_calendario.value()
+        )
         
-
-        for spinbox in spinboxes:
-
-            spinbox.setMinimum(2000)
-            spinbox.setMaximum(2100)
-
-            spinbox.setButtonSymbols(
-                QSpinBox.ButtonSymbols.UpDownArrows
-            )
-
-            spinbox.setMinimumWidth(70)
-
-            spinbox.setMinimumHeight(30)
-
-            spinbox.setEnabled(True)
-
-            spinbox.setFocusPolicy(
-                Qt.FocusPolicy.StrongFocus
-            )
-            
-            # Intercepta os cliques nas setas
-            
-            spinbox.installEventFilter(self)
-            
-            print(
-                "ANO:",
-                spinbox.value(),
-                "MIN:",
-                spinbox.minimum(),
-                "MAX:",
-                spinbox.maximum(),
-                "ENABLED:",
-                spinbox.isEnabled(),
-                "READONLY:",
-                spinbox.isReadOnly()
-            )
-        
-# ==================================================
-# CONTROLAR SETAS DO ANO
-# ==================================================
-
-    def eventFilter(self, obj, event):
-
-        if isinstance(obj, QSpinBox):
-
-            # Movimento do mouse
-            if event.type() == QEvent.Type.MouseMove:
-
-                largura = obj.width()
-                altura = obj.height()
-
-                # Área aproximada das setas
-                if event.position().x() >= largura - 25:
-
-                    obj.setCursor(
-                        QCursor(
-                            Qt.CursorShape.PointingHandCursor
-                        )
-                    )
-
-                else:
-
-                    obj.setCursor(
-                        QCursor(
-                            Qt.CursorShape.ArrowCursor
-                        )
-                    )
-
-            # Clique do mouse
-            elif event.type() == QEvent.Type.MouseButtonPress:
-
-                if event.button() == (
-                    Qt.MouseButton.LeftButton
-                ):
-
-                    largura = obj.width()
-                    altura = obj.height()
-
-                    x = event.position().x()
-                    y = event.position().y()
-
-                    # Verifica se clicou na área das setas
-                    if x >= largura - 25:
-
-                        # Parte superior = aumentar ano
-                        if y < altura / 2:
-
-                            if obj.value() < obj.maximum():
-
-                                obj.stepUp()
-
-                            return True
-
-                        # Parte inferior = diminuir ano
-                        else:
-
-                            if obj.value() > obj.minimum():
-
-                                obj.stepDown()
-
-                            return True
-
-        return super().eventFilter(
-            obj,
-            event
-        ) 
-
     # ==================================================
     # CARREGAR OBREIROS
     # ==================================================
@@ -1164,3 +1194,46 @@ class TelaMontarEscala(QWidget):
         self.botao_adicionar.setEnabled(
             True
         )
+        
+    # ==================================================
+    # AUMENTAR ANO
+    # ==================================================
+
+    def aumentar_ano(self):
+
+        ano_atual = self.ano_calendario.value()
+
+        if ano_atual < self.ano_calendario.maximum():
+
+            novo_ano = ano_atual + 1
+
+            self.ano_calendario.setValue(
+                novo_ano
+            )
+
+            self.calendario.setCurrentPage(
+                novo_ano,
+                self.calendario.monthShown()
+            )
+
+
+    # ==================================================
+    # DIMINUIR ANO
+    # ==================================================
+
+    def diminuir_ano(self):
+
+        ano_atual = self.ano_calendario.value()
+
+        if ano_atual > self.ano_calendario.minimum():
+
+            novo_ano = ano_atual - 1
+
+            self.ano_calendario.setValue(
+                novo_ano
+            )
+
+            self.calendario.setCurrentPage(
+                novo_ano,
+                self.calendario.monthShown()
+            )
