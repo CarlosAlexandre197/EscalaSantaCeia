@@ -16,6 +16,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from database import Banco
 from gerar_pdf import gerar_pdf as criar_pdf
+from whatsapp import abrir_whatsapp
 
 from style import (
     COR_AZUL,
