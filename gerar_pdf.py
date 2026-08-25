@@ -75,7 +75,7 @@ def gerar_pdf(
         alignment=TA_CENTER,
         fontSize=13,
         leading=18,
-        textColor=colors.HexColor("#1976D2"),
+        textColor=colors.black,
         spaceAfter=15
     )
 
