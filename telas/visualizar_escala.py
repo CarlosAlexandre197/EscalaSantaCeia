@@ -485,22 +485,97 @@ class TelaVisualizarEscala(QWidget):
 
     def gerar_pdf(self):
 
-        if self.combo_escalas.currentData() is None:
+        escala_id = (
+            self.combo_escalas.currentData()
+        )
+
+        if escala_id is None:
 
             QMessageBox.warning(
                 self,
                 "Atenção",
-                "Selecione uma escala."
+                "Selecione uma Santa Ceia."
             )
 
             return
 
-        QMessageBox.information(
-            self,
-            "Em desenvolvimento",
-            "A geração do PDF será implementada "
-            "na próxima etapa."
+        registros = (
+            self.banco.buscar_santa_ceia(
+                escala_id
+            )
         )
+
+        if not registros:
+
+            QMessageBox.warning(
+                self,
+                "Atenção",
+                "Não existem obreiros cadastrados "
+                "para esta Santa Ceia."
+            )
+
+            return
+
+        data = registros[0]["data"]
+
+        partes = data.split("-")
+
+        if len(partes) == 3:
+
+            data_formatada = (
+                f"{partes[2]}/"
+                f"{partes[1]}/"
+                f"{partes[0]}"
+            )
+
+        else:
+
+            data_formatada = data
+
+        obreiros = []
+
+        for registro in registros:
+
+            obreiros.append(
+                registro["obreiro_nome"]
+            )
+
+        nome_arquivo = (
+            f"Escala_Santa_Ceia_"
+            f"{data_formatada.replace('/', '-')}.pdf"
+        )
+
+        caminho, _ = QFileDialog.getSaveFileName(
+            self,
+            "Salvar PDF",
+            nome_arquivo,
+            "Arquivos PDF (*.pdf)"
+        )
+
+        if not caminho:
+            return
+
+        try:
+
+            criar_pdf(
+                caminho,
+                data_formatada,
+                obreiros
+            )
+
+            QMessageBox.information(
+                self,
+                "Sucesso",
+                "PDF gerado com sucesso!"
+            )
+
+        except Exception as erro:
+
+            QMessageBox.critical(
+                self,
+                "Erro",
+                f"Não foi possível gerar o PDF:\n\n{erro}"
+            )
 
     # ==================================================
     # WHATSAPP
