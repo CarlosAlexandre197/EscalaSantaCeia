@@ -581,7 +581,6 @@ class TelaVisualizarEscala(QWidget):
     # ==================================================
     # WHATSAPP
     # ==================================================
-
     def enviar_whatsapp(self):
 
         escala_id = (
@@ -598,7 +597,115 @@ class TelaVisualizarEscala(QWidget):
 
             return
 
-        abrir_whatsapp()
+        registros = (
+            self.banco.buscar_santa_ceia(
+                escala_id
+            )
+        )
+
+        if not registros:
+
+            QMessageBox.warning(
+                self,
+                "Atenção",
+                "Não existem obreiros cadastrados "
+                "para esta Santa Ceia."
+            )
+
+            return
+
+        # ==============================================
+        # DATA
+        # ==============================================
+
+        data = registros[0]["data"]
+
+        partes = data.split("-")
+
+        if len(partes) == 3:
+
+            data_formatada = (
+                f"{partes[2]}/"
+                f"{partes[1]}/"
+                f"{partes[0]}"
+            )
+
+        else:
+
+            data_formatada = data
+
+        # ==============================================
+        # OBREIROS
+        # ==============================================
+
+        obreiros = []
+
+        for registro in registros:
+
+            obreiros.append(
+                registro["obreiro_nome"]
+            )
+
+        # ==============================================
+        # NOME DO PDF
+        # ==============================================
+
+        nome_arquivo = (
+            f"Escala_Santa_Ceia_"
+            f"{data_formatada.replace('/', '-')}.pdf"
+        )
+
+        # ==============================================
+        # ESCOLHER LOCAL PARA SALVAR
+        # ==============================================
+
+        caminho, _ = QFileDialog.getSaveFileName(
+            self,
+            "Salvar PDF para WhatsApp",
+            nome_arquivo,
+            "Arquivos PDF (*.pdf)"
+        )
+
+        if not caminho:
+
+            return
+
+        try:
+
+            # ==========================================
+            # GERA PDF
+            # ==========================================
+
+            criar_pdf(
+                caminho,
+                data_formatada,
+                obreiros
+            )
+
+            # ==========================================
+            # ABRE WHATSAPP
+            # ==========================================
+
+            abrir_whatsapp()
+
+            QMessageBox.information(
+                self,
+                "PDF pronto",
+                "O PDF foi gerado com sucesso!\n\n"
+                "O WhatsApp Web foi aberto.\n\n"
+                "Agora basta anexar o PDF e enviar "
+                "para o grupo."
+            )
+
+        except Exception as erro:
+
+            QMessageBox.critical(
+                self,
+                "Erro",
+                f"Não foi possível preparar o envio:\n\n"
+                f"{erro}"
+            )
+    
     # ==================================================
     # FECHAR
     # ==================================================
