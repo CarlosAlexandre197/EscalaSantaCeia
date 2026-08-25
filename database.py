@@ -1,14 +1,29 @@
 import sqlite3
 import os
+import sys
 
 
 class Banco:
 
     def __init__(self):
 
-        pasta_projeto = os.path.dirname(
-            os.path.abspath(__file__)
-        )
+        # ==================================================
+        # LOCAL DO BANCO DE DADOS
+        # ==================================================
+
+        if getattr(sys, "frozen", False):
+
+            # Quando estiver rodando pelo EXE
+            pasta_projeto = os.path.dirname(
+                sys.executable
+            )
+
+        else:
+
+            # Quando estiver rodando pelo Python
+            pasta_projeto = os.path.dirname(
+                os.path.abspath(__file__)
+            )
 
         self.caminho_banco = os.path.join(
             pasta_projeto,
@@ -16,10 +31,17 @@ class Banco:
             "santa_ceia.db"
         )
 
+        # Cria a pasta banco caso não exista
         os.makedirs(
-            os.path.dirname(self.caminho_banco),
+            os.path.dirname(
+                self.caminho_banco
+            ),
             exist_ok=True
         )
+
+        # ==================================================
+        # CONEXÃO COM O BANCO
+        # ==================================================
 
         self.conexao = sqlite3.connect(
             self.caminho_banco
@@ -37,9 +59,9 @@ class Banco:
 
         cursor = self.conexao.cursor()
 
-        # ----------------------------------------------
+        # ==================================================
         # OBRIEIROS
-        # ----------------------------------------------
+        # ==================================================
 
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS obreiros (
@@ -50,9 +72,9 @@ class Banco:
             )
         """)
 
-        # ----------------------------------------------
+        # ==================================================
         # SANTA CEIAS
-        # ----------------------------------------------
+        # ==================================================
 
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS santa_ceias (
@@ -61,9 +83,9 @@ class Banco:
             )
         """)
 
-        # ----------------------------------------------
-        # RELAÇÃO SANTA CEIA x OBREIROS
-        # ----------------------------------------------
+        # ==================================================
+        # RELAÇÃO SANTA CEIA X OBREIROS
+        # ==================================================
 
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS santa_ceia_obreiros (
@@ -117,6 +139,10 @@ class Banco:
 
         return cursor.lastrowid
 
+    # ==================================================
+    # LISTAR OBRIEIROS
+    # ==================================================
+
     def listar_obreiros(
         self,
         apenas_ativos=True
@@ -143,6 +169,10 @@ class Banco:
 
         return cursor.fetchall()
 
+    # ==================================================
+    # BUSCAR OBRIEIRO
+    # ==================================================
+
     def buscar_obreiro(
         self,
         id
@@ -159,6 +189,10 @@ class Banco:
         ))
 
         return cursor.fetchone()
+
+    # ==================================================
+    # ATUALIZAR OBRIEIRO
+    # ==================================================
 
     def atualizar_obreiro(
         self,
@@ -183,6 +217,10 @@ class Banco:
 
         self.conexao.commit()
 
+    # ==================================================
+    # DESATIVAR OBRIEIRO
+    # ==================================================
+
     def desativar_obreiro(
         self,
         id
@@ -199,6 +237,10 @@ class Banco:
         ))
 
         self.conexao.commit()
+
+    # ==================================================
+    # ATIVAR OBRIEIRO
+    # ==================================================
 
     def ativar_obreiro(
         self,
@@ -273,6 +315,10 @@ class Banco:
 
             raise
 
+    # ==================================================
+    # LISTAR SANTA CEIAS
+    # ==================================================
+
     def listar_santa_ceias(self):
 
         cursor = self.conexao.cursor()
@@ -301,6 +347,10 @@ class Banco:
         """)
 
         return cursor.fetchall()
+
+    # ==================================================
+    # BUSCAR SANTA CEIA
+    # ==================================================
 
     def buscar_santa_ceia(
         self,
@@ -332,7 +382,11 @@ class Banco:
         ))
 
         return cursor.fetchall()
-    
+
+    # ==================================================
+    # ATUALIZAR SANTA CEIA
+    # ==================================================
+
     def atualizar_santa_ceia(
         self,
         santa_ceia_id,
@@ -344,7 +398,9 @@ class Banco:
 
         try:
 
-            santa_ceia_id = int(santa_ceia_id)
+            santa_ceia_id = int(
+                santa_ceia_id
+            )
 
             # ------------------------------------------
             # Atualiza a data
@@ -360,7 +416,7 @@ class Banco:
             ))
 
             # ------------------------------------------
-            # Remove os participantes antigos
+            # Remove participantes antigos
             # ------------------------------------------
 
             cursor.execute("""
@@ -376,7 +432,9 @@ class Banco:
 
             for obreiro_id in obreiros_ids:
 
-                obreiro_id = int(obreiro_id)
+                obreiro_id = int(
+                    obreiro_id
+                )
 
                 cursor.execute("""
                     INSERT INTO santa_ceia_obreiros (
@@ -397,6 +455,10 @@ class Banco:
 
             raise
 
+    # ==================================================
+    # EXCLUIR SANTA CEIA
+    # ==================================================
+
     def excluir_santa_ceia(
         self,
         santa_ceia_id
@@ -404,6 +466,7 @@ class Banco:
 
         cursor = self.conexao.cursor()
 
+        # Remove os obreiros vinculados
         cursor.execute("""
             DELETE FROM santa_ceia_obreiros
             WHERE santa_ceia_id = ?
@@ -411,6 +474,7 @@ class Banco:
             santa_ceia_id,
         ))
 
+        # Remove a Santa Ceia
         cursor.execute("""
             DELETE FROM santa_ceias
             WHERE id = ?
@@ -429,3 +493,4 @@ class Banco:
         if self.conexao:
 
             self.conexao.close()
+```
