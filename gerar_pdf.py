@@ -108,8 +108,8 @@ def gerar_pdf(
             caminho_logo
         )
 
-        logo.drawHeight = 2.5 * cm
-        logo.drawWidth = 2.5 * cm
+        logo.drawHeight = 3 * cm
+        logo.drawWidth = 3 * cm
 
         tabela_logo = Table(
             [[logo]],
