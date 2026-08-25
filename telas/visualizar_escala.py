@@ -530,6 +530,4 @@ class TelaVisualizarEscala(QWidget):
 
     def closeEvent(self, event):
 
-        self.banco.fechar()
-
         event.accept()
