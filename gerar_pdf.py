@@ -1,6 +1,11 @@
+import os
+
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.styles import (
+    getSampleStyleSheet,
+    ParagraphStyle
+)
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import cm
 from reportlab.platypus import (
@@ -8,7 +13,8 @@ from reportlab.platypus import (
     Paragraph,
     Spacer,
     Table,
-    TableStyle
+    TableStyle,
+    Image
 )
 
 
@@ -18,13 +24,37 @@ def gerar_pdf(
     obreiros
 ):
 
+    # ==================================================
+    # CAMINHO DAS IMAGENS
+    # ==================================================
+
+    pasta_projeto = os.path.dirname(
+        os.path.abspath(__file__)
+    )
+
+    caminho_logo = os.path.join(
+        pasta_projeto,
+        "imagens",
+        "logo_igreja.jpg"
+    )
+
+    caminho_assinatura = os.path.join(
+        pasta_projeto,
+        "imagens",
+        "assinatura.png"
+    )
+
+    # ==================================================
+    # DOCUMENTO
+    # ==================================================
+
     documento = SimpleDocTemplate(
         caminho,
         pagesize=A4,
         rightMargin=2 * cm,
         leftMargin=2 * cm,
-        topMargin=2 * cm,
-        bottomMargin=2 * cm
+        topMargin=1.5 * cm,
+        bottomMargin=1.5 * cm
     )
 
     estilos = getSampleStyleSheet()
@@ -34,28 +64,86 @@ def gerar_pdf(
         parent=estilos["Title"],
         alignment=TA_CENTER,
         fontSize=20,
-        spaceAfter=8
+        leading=24,
+        textColor=colors.HexColor("#0D47A1"),
+        spaceAfter=5
     )
 
     estilo_subtitulo = ParagraphStyle(
         "Subtitulo",
         parent=estilos["Normal"],
         alignment=TA_CENTER,
-        fontSize=14,
-        spaceAfter=20
+        fontSize=13,
+        leading=18,
+        textColor=colors.HexColor("#1976D2"),
+        spaceAfter=15
     )
 
-    estilo_normal = ParagraphStyle(
-        "NormalPersonalizado",
+    estilo_data = ParagraphStyle(
+        "Data",
         parent=estilos["Normal"],
-        fontSize=11
+        alignment=TA_CENTER,
+        fontSize=14,
+        leading=18,
+        spaceAfter=15
+    )
+
+    estilo_rodape = ParagraphStyle(
+        "Rodape",
+        parent=estilos["Normal"],
+        alignment=TA_CENTER,
+        fontSize=10,
+        textColor=colors.grey
     )
 
     elementos = []
 
-    # ==============================================
+    # ==================================================
+    # LOGO
+    # ==================================================
+
+    if os.path.exists(caminho_logo):
+
+        logo = Image(
+            caminho_logo
+        )
+
+        logo.drawHeight = 2.5 * cm
+        logo.drawWidth = 2.5 * cm
+
+        tabela_logo = Table(
+            [[logo]],
+            colWidths=[17 * cm]
+        )
+
+        tabela_logo.setStyle(
+            TableStyle([
+                (
+                    "ALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "CENTER"
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE"
+                )
+            ])
+        )
+
+        elementos.append(
+            tabela_logo
+        )
+
+        elementos.append(
+            Spacer(1, 8)
+        )
+
+    # ==================================================
     # CABEÇALHO
-    # ==============================================
+    # ==================================================
 
     elementos.append(
         Paragraph(
@@ -73,18 +161,18 @@ def gerar_pdf(
 
     elementos.append(
         Paragraph(
-            f"<b>Data:</b> {data}",
-            estilo_normal
+            f"<b>Data: {data}</b>",
+            estilo_data
         )
     )
 
     elementos.append(
-        Spacer(1, 20)
+        Spacer(1, 5)
     )
 
-    # ==============================================
+    # ==================================================
     # TABELA
-    # ==============================================
+    # ==================================================
 
     dados = [
         [
@@ -110,7 +198,8 @@ def gerar_pdf(
         colWidths=[
             2 * cm,
             14 * cm
-        ]
+        ],
+        repeatRows=1
     )
 
     tabela.setStyle(
@@ -144,7 +233,7 @@ def gerar_pdf(
                 (0, 0),
                 (-1, -1),
                 0.5,
-                colors.grey
+                colors.HexColor("#BDBDBD")
             ),
             (
                 "FONTNAME",
@@ -168,13 +257,13 @@ def gerar_pdf(
                 "TOPPADDING",
                 (0, 0),
                 (-1, -1),
-                8
+                9
             ),
             (
                 "BOTTOMPADDING",
                 (0, 0),
                 (-1, -1),
-                8
+                9
             )
         ])
     )
@@ -183,31 +272,76 @@ def gerar_pdf(
         tabela
     )
 
+    # ==================================================
+    # ASSINATURA
+    # ==================================================
+
     elementos.append(
-        Spacer(1, 40)
+        Spacer(1, 35)
+    )
+
+    if os.path.exists(caminho_assinatura):
+
+        assinatura = Image(
+            caminho_assinatura
+        )
+
+        assinatura.drawHeight = 2 * cm
+        assinatura.drawWidth = 5 * cm
+
+        tabela_assinatura = Table(
+            [[assinatura]],
+            colWidths=[17 * cm]
+        )
+
+        tabela_assinatura.setStyle(
+            TableStyle([
+                (
+                    "ALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "CENTER"
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE"
+                )
+            ])
+        )
+
+        elementos.append(
+            tabela_assinatura
+        )
+
+    else:
+
+        elementos.append(
+            Spacer(1, 20)
+        )
+
+    elementos.append(
+        Paragraph(
+            "Carlos Alexandre",
+            estilo_rodape
+        )
+    )
+
+    elementos.append(
+        Spacer(1, 15)
     )
 
     elementos.append(
         Paragraph(
             "Escala Santa Ceia",
-            estilo_normal
+            estilo_rodape
         )
     )
 
-    elementos.append(
-        Spacer(1, 30)
-    )
-
-    elementos.append(
-        Paragraph(
-            "Carlos Alexandre",
-            estilo_normal
-        )
-    )
-
-    # ==============================================
-    # GERAR
-    # ==============================================
+    # ==================================================
+    # GERAR PDF
+    # ==================================================
 
     documento.build(
         elementos
