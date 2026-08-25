@@ -584,23 +584,21 @@ class TelaVisualizarEscala(QWidget):
 
     def enviar_whatsapp(self):
 
-        if self.combo_escalas.currentData() is None:
+        escala_id = (
+            self.combo_escalas.currentData()
+        )
+
+        if escala_id is None:
 
             QMessageBox.warning(
                 self,
                 "Atenção",
-                "Selecione uma escala."
+                "Selecione uma Santa Ceia."
             )
 
             return
 
-        QMessageBox.information(
-            self,
-            "Em desenvolvimento",
-            "O envio pelo WhatsApp será implementado "
-            "posteriormente."
-        )
-
+        abrir_whatsapp()
     # ==================================================
     # FECHAR
     # ==================================================
