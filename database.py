@@ -120,7 +120,7 @@ class Banco:
         self,
         nome,
         telefone=""
-    ):
+        ):
 
         cursor = self.conexao.cursor()
 
@@ -146,7 +146,7 @@ class Banco:
     def listar_obreiros(
         self,
         apenas_ativos=True
-    ):
+        ):
 
         cursor = self.conexao.cursor()
 
@@ -176,7 +176,7 @@ class Banco:
     def buscar_obreiro(
         self,
         id
-    ):
+        ):
 
         cursor = self.conexao.cursor()
 
@@ -493,4 +493,3 @@ class Banco:
         if self.conexao:
 
             self.conexao.close()
-```
