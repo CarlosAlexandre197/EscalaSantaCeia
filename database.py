@@ -30,6 +30,11 @@ class Banco:
             "banco",
             "santa_ceia.db"
         )
+        
+        print(
+            "BANCO USADO PELO PROGRAMA:",
+            self.caminho_banco
+        )
 
         # Cria a pasta banco caso não exista
         os.makedirs(
