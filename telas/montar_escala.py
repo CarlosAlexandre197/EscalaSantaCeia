@@ -293,9 +293,31 @@ class TelaMontarEscala(QWidget):
 
         self.lista_obreiros = QListWidget()
 
-        self.lista_obreiros.setMinimumHeight(
-            180
-        )
+        self.lista_obreiros.setMinimumHeight(180)
+
+        self.lista_obreiros.setStyleSheet("""
+            QListWidget {
+                background-color: white;
+                color: #1f2937;
+                border: 1px solid #b0bec5;
+                border-radius: 6px;
+                font-size: 14px;
+            }
+
+            QListWidget::item {
+                color: #1f2937;
+                padding: 5px;
+            }
+
+            QListWidget::item:hover {
+                background-color: #e3f2fd;
+            }
+
+            QListWidget::item:selected {
+                background-color: #1976D2;
+                color: white;
+            }
+        """)
 
         layout_central.addWidget(
             self.lista_obreiros
